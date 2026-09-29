@@ -1,0 +1,44 @@
+{
+  "shorts": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "label": "YouTube Shorts / Reels / TikTok (9:16)"
+  },
+  "landscape": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "label": "Standard YouTube (16:9)"
+  },
+  "square": {
+    "width": 1080,
+    "height": 1080,
+    "fps": 30,
+    "label": "Feed post (1:1)"
+  },
+  "shorts-hq": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 60,
+    "label": "Shorts at 60fps"
+  },
+  "logo": {
+    "width": 800,
+    "height": 800,
+    "fps": 1,
+    "label": "Channel avatar (shown as a circle)"
+  },
+  "banner": {
+    "width": 2048,
+    "height": 1152,
+    "fps": 1,
+    "label": "Channel banner \u2014 safe area 1235x338 centred"
+  },
+  "thumb": {
+    "width": 1280,
+    "height": 720,
+    "fps": 1,
+    "label": "Video thumbnail"
+  }
+}

@@ -1,0 +1,173 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>paper-studio stage</title>
+<style>
+  :root {
+    /* macOS-resident faces by default; drop .ttf files in assets/fonts and add
+       @font-face here to make renders identical on any machine. */
+    --font-display: 'Superclarendon', 'Rockwell', 'Bookman Old Style', Georgia, serif;
+    --font-hand:    'Bradley Hand', 'Chalkboard SE', 'Comic Sans MS', cursive;
+    --font-body:    'Avenir Next', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-deva:    'Kohinoor Devanagari', 'Devanagari Sangam MN', 'Noto Sans Devanagari', serif;
+  }
+  html, body { margin: 0; padding: 0; background: #111; overflow: hidden; }
+  #root {
+    position: relative;
+    overflow: hidden;
+    transform-origin: top left;
+  }
+  #stage-svg { display: block; }
+  /* Paper fibre over the whole frame, multiplied in. This single overlay is
+     what makes flat vector shapes read as physical paper. */
+  #grain {
+    position: absolute; inset: 0;
+    background-repeat: repeat;
+    mix-blend-mode: multiply;
+    opacity: .78;
+    background-size: 512px 512px;
+    pointer-events: none;
+  }
+  #vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(130% 92% at 50% 44%, rgba(0,0,0,0) 52%, rgba(40,30,19,.13) 78%, rgba(34,25,15,.30) 100%);
+    pointer-events: none;
+  }
+  /* Preview-only chrome; never present during a render. */
+  #ui { position: fixed; left: 0; right: 0; bottom: 0; padding: 10px 14px;
+        background: #1b1b1fdd; color: #eee; font: 13px/1.4 ui-monospace, monospace;
+        display: flex; gap: 12px; align-items: center; z-index: 99; }
+  #ui input[type=range] { flex: 1; }
+  #ui button { background: #333; color: #eee; border: 1px solid #555; border-radius: 4px;
+               padding: 4px 12px; cursor: pointer; font: inherit; }
+</style>
+<div id="root"></div>
+
+<script type="module">
+import { Stage } from './stage.js';
+import { addCaptions } from './captions.js';
+import { collectScript, chapterWindows, buildChapters } from './chapters.js';
+
+const q = new URLSearchParams(location.search);
+const episodeName = q.get('episode') || 'demo';
+const presetName  = q.get('preset')  || '';
+const preview     = q.get('preview') === '1';
+
+const presets = await (await fetch('../config/presets.json')).json();
+
+// Timings come from the built voiceover; preview falls back to the episode's
+// own estimates so you can scrub before any audio exists.
+let timings = {};
+try { timings = await (await fetch(`../episodes/${episodeName}/timings.json`)).json(); } catch {}
+
+const mod = await import(`../episodes/${episodeName}/episode.js`);
+const episode = mod.default;
+
+const preset = presets[presetName || episode.meta?.preset || 'shorts'];
+const root = document.getElementById('root');
+root.style.width = preset.width + 'px';
+root.style.height = preset.height + 'px';
+
+const stage = new Stage({
+  width: preset.width,
+  height: preset.height,
+  bg: episode.meta?.bg,
+  boil: episode.meta?.boil,
+});
+
+// --- narration timing helpers handed to every scene ------------------------
+const lines = collectScript(episode);
+function fallbackTimings() {
+  // ~2.6 words/second reading pace, plus the episode's own gaps.
+  let t = episode.meta?.leadIn ?? 0.6;
+  const out = {};
+  for (const l of lines) {
+    const words = String(l.text).trim().split(/\s+/).length;
+    const dur = l.dur ?? Math.max(0.9, words / 2.6);
+    out[l.id] = { start: t, dur, end: t + dur };
+    t += dur + (l.gap ?? 0.25);
+  }
+  return out;
+}
+const T = Object.keys(timings).length ? timings : fallbackTimings();
+
+const portrait = preset.height > preset.width;
+
+const api = {
+  stage,
+  tl: stage.tl,
+  preset,
+  /** true when rendering 9:16 — the same episode also cuts to Shorts */
+  portrait,
+  /**
+   * Pick a value per aspect. Elements that sit side-by-side in 16:9 have to
+   * stack in 9:16, and no amount of fractional positioning fixes that on its
+   * own — the arrangement itself has to change.
+   *   x: pick(CX + W * 0.2, CX)
+   */
+  pick: (wide, tall) => (portrait ? tall : wide),
+  /** absolute start time of a narration line */
+  at: id => T[id]?.start ?? 0,
+  /** absolute end time */
+  end: id => T[id]?.end ?? 0,
+  /** duration of a line */
+  dur: id => T[id]?.dur ?? 0,
+  /** start of first line .. end of last line in a list */
+  window: (...ids) => [T[ids[0]]?.start ?? 0, T[ids[ids.length - 1]]?.end ?? 0],
+  all: T,
+};
+
+// Chapters (long-form) or a single build() (shorts) — same timeline either way.
+const chWindows = chapterWindows(episode, T, { lead: 0.45, tail: 0.3 });
+buildChapters(episode, api, chWindows);
+window.__chapters = chWindows;
+
+// Captions are part of the picture, not a post-process.
+if (episode.captions?.enabled) addCaptions(stage, lines, T, episode.captions);
+
+stage.mount(root);
+
+const tail = episode.meta?.tailOut ?? 0.8;
+const lastEnd = Math.max(0, ...Object.values(T).map(v => v.end));
+const duration = episode.meta?.duration ?? Math.max(stage.duration, lastEnd + tail);
+
+// --- render contract -------------------------------------------------------
+window.__stage = stage;
+window.__duration = duration;
+window.__fps = preset.fps;
+window.__size = { width: preset.width, height: preset.height };
+window.__seek = t => { stage.seek(t); return t; };
+window.__ready = true;
+
+stage.seek(0);
+
+// --- preview scrubber ------------------------------------------------------
+if (preview) {
+  const scale = Math.min(1, (window.innerHeight - 90) / preset.height, window.innerWidth / preset.width);
+  root.style.transform = `scale(${scale})`;
+  document.body.style.overflow = 'hidden';
+
+  const ui = document.createElement('div');
+  ui.id = 'ui';
+  ui.innerHTML = `<button id="pp">play</button>
+    <input type="range" id="sc" min="0" max="${duration}" step="0.01" value="0">
+    <span id="tt">0.00 / ${duration.toFixed(2)}s</span>`;
+  document.body.appendChild(ui);
+
+  const pp = ui.querySelector('#pp'), sc = ui.querySelector('#sc'), tt = ui.querySelector('#tt');
+  let playing = false, t0 = 0, base = 0;
+  const show = t => { stage.seek(t); sc.value = t; tt.textContent = `${t.toFixed(2)} / ${duration.toFixed(2)}s`; };
+  sc.addEventListener('input', () => { base = +sc.value; t0 = performance.now(); show(base); });
+  pp.addEventListener('click', () => {
+    playing = !playing; pp.textContent = playing ? 'pause' : 'play';
+    t0 = performance.now(); base = +sc.value;
+    if (playing) requestAnimationFrame(loop);
+  });
+  function loop(now) {
+    if (!playing) return;
+    let t = base + (now - t0) / 1000;
+    if (t >= duration) { t = 0; base = 0; t0 = now; }
+    show(t);
+    requestAnimationFrame(loop);
+  }
+}
+</script>

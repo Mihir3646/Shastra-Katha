@@ -1,0 +1,25 @@
+{
+  "name": "paper-studio",
+  "version": "1.0.0",
+  "description": "Zero-cost papercraft animation studio: JS animation -> local TTS -> ffmpeg.",
+  "scripts": {
+    "build": "node engine/build.mjs",
+    "render": "node engine/render.mjs",
+    "preview": "node engine/preview.mjs",
+    "shot": "node engine/shot.mjs",
+    "music": "./voice/.venv/bin/python tools/make-music.py",
+    "voices": "./voice/.venv/bin/python voice/tts.py --list-voices --script /dev/null --out /tmp",
+    "new": "node tools/new-episode.mjs",
+    "review": "node tools/review-script.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@ai-sdk/gateway": "^4.0.100",
+    "ai": "^7.0.122",
+    "playwright": "^1.63.0"
+  },
+  "private": true
+}

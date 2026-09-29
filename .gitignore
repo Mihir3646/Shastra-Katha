@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# python voice environments (~1.4 GB each; rebuilt by tools/setup.sh)
+voice/.venv/
+voice/.venv-parler/
+
+# secrets — never commit
+.env
+.env.local
+
+# generated output
+out/
+.cache/
+
+# generated per-episode audio and intermediates
+episodes/*/narration.wav
+episodes/*/lines/
+episodes/*/script.json
+episodes/*/timings.json
+episodes/*/.concat.txt
+
+# your own voice recordings — large, and yours
+episodes/*/voice/
+
+# editor / os
+.DS_Store
+.idea/

@@ -27,7 +27,7 @@ export default {
         stage.add({ id: 'ring2', svg: `<circle cx="${CX}" cy="${CY}" r="${W*0.43}" fill="${MB.ground}"
           stroke="${MB.ink}" stroke-width="10"/>`, x: 0, y: 0, layer: 1, boil: false });
         // LOGO_FACE: 'solemn' | 'none' | 'smile'
-        stage.add({ id: 'sun', svg: sunFace(W * 0.235, { rays: 14, face: 'solemn' }), x: CX, y: CY, layer: 4 });
+        stage.add({ id: 'sun', svg: sunFace(W * 0.235, { rays: 14, face: 'none' }), x: CX, y: CY, layer: 4 });
         return;
       }
 
@@ -47,7 +47,7 @@ export default {
         stage.add({ id: 'fishR', svg: fish(140), x: W - sx * 0.5, y: CY + 110, layer: 2, rot: 6 });
 
         // inside the safe area
-        stage.add({ id: 'sun', svg: sunFace(78, { rays: 14 }), x: sx + 150, y: sy + 169, layer: 6 });
+        stage.add({ id: 'sun', svg: sunFace(78, { rays: 14, face: 'none' }), x: sx + 150, y: sy + 169, layer: 6 });
         stage.add({ id: 'name', svg: text('शास्त्र कथा', { size: 112, font: 'var(--font-deva)', fill: MB.ink }),
           x: sx + 700, y: sy + 120, layer: 6 });
         stage.add({ id: 'band', svg: mbBand(600, { h: 22, fill: MB.ochre, pattern: 'chevron' }),

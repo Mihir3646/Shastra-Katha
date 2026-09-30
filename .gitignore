@@ -26,3 +26,8 @@ episodes/*/voice/
 # editor / os
 .DS_Store
 .idea/
+
+# Artwork is kept out of the public repo until its rights are confirmed —
+# see assets/art/README.md. The build reads these from disk; they are not
+# redistributed here.
+assets/art/*.png

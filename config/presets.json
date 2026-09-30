@@ -40,5 +40,11 @@
     "height": 720,
     "fps": 1,
     "label": "Video thumbnail"
+  },
+  "art": {
+    "width": 1400,
+    "height": 1400,
+    "fps": 1,
+    "label": "Standalone artwork export"
   }
 }

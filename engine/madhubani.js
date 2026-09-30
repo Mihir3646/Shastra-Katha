@@ -31,6 +31,7 @@ export const MB = {
   yellow:   '#EBC04A',
   indigo:   '#2E4A7D',
   blue:     '#3F6FA8',
+  sky:      '#7FAFCE',   // referenced by episodes; without it fills render black
   green:    '#4E7A3A',
   leaf:     '#6D9A4A',
   pink:     '#D4738A',
@@ -459,5 +460,80 @@ export function compass(r, opts = {}) {
       text-anchor="middle" font-family="var(--font-deva)" font-size="${f(r * 0.26)}"
       font-weight="700" fill="${MB.ink}">${labels[i]}</text>`;
   }
+  return out;
+}
+
+/**
+ * Vāstupuruṣa — the figure the whole mandala is built on.
+ *
+ * The iconography is fixed and matters: he lies PRONE, face to the ground,
+ * curled along the NE–SW diagonal, head in ईशान (north-east), feet in नैऋत्य
+ * (south-west), limbs folded. Bṛhat Saṃhitā 53.2–3 describes exactly that —
+ * the Devas held his limbs and laid him face down.
+ *
+ * Limbs are TAPERED FILLED forms, not stroked polylines: a constant-width
+ * stroke reads as a sausage, which is both ugly and disrespectful for a figure
+ * that carries this much meaning.
+ *
+ * Drawn to fill a square of side `S` centred on the origin, so it registers
+ * with mbVastuGrid(S) at the same position — index 2 of that grid is the NE
+ * corner at the head, index 6 the SW corner at the feet.
+ */
+
+/**
+ * Drop a real illustration into a scene.
+ *
+ * The Vāstupuruṣa is the one thing in this kit that must NOT be generated:
+ * a figure in a fixed sacred posture needs an artist, and three procedural
+ * attempts all read as a toy. Put a proper image at assets/art/<name> and
+ * reference it here — the renderer serves that directory over HTTP.
+ *
+ *   artwork('vastu-purusha.png', 620)
+ *
+ * Returns an empty group if the file is absent, so a scene still renders while
+ * the artwork is being commissioned.
+ */
+export function artwork(file, size, opts = {}) {
+  const { opacity = 1, aspect = 1 } = opts;
+  const w = size, h = size / aspect;
+  return `<image href="../assets/art/${file}" x="${f(-w / 2)}" y="${f(-h / 2)}"
+    width="${f(w)}" height="${f(h)}" opacity="${opacity}"
+    preserveAspectRatio="xMidYMid meet"/>`;
+}
+
+/**
+ * The mandala WITHOUT a figure — grid plus the deity names in their quarters.
+ * This is a legitimate traditional representation in its own right, not a
+ * fallback: plenty of published Vāstupuruṣa Maṇḍala charts show exactly this.
+ */
+export function devataMandala(S, opts = {}) {
+  const {
+    stroke = MB.ink, sw = 4.5, seed = 'dm',
+    centre = 'ब्रह्म',
+    corners = { ne: 'ईशान', se: 'आग्नेय', sw: 'नैऋत्य', nw: 'वायव्य' },
+    cardinals = { n: 'उत्तर', e: 'पूर्व', s: 'दक्षिण', w: 'पश्चिम' },
+    cornerFill = MB.cream, centreFill = MB.ochre, cellFill = MB.cream,
+  } = opts;
+  const c = S / 3;
+  const order = [
+    ['nw', corners.nw, cornerFill], ['n', cardinals.n, cellFill], ['ne', corners.ne, cornerFill],
+    ['w', cardinals.w, cellFill],  ['c', centre, centreFill],    ['e', cardinals.e, cellFill],
+    ['sw', corners.sw, cornerFill], ['s', cardinals.s, cellFill], ['se', corners.se, cornerFill],
+  ];
+  let out = '';
+  order.forEach(([key, label, fill], i) => {
+    const col = i % 3, row = (i / 3) | 0;
+    const x = -S / 2 + col * c, y = -S / 2 + row * c;
+    out += `<g transform="translate(${f(x)},${f(y)})">` +
+      ink(tornRect(c, c, { seed: seed + i, amp: 2, style: 'cut' }), fill,
+          { pattern: key === 'c' ? 'dots' : null, sw, stroke }) +
+      `<text x="${f(c / 2)}" y="${f(c / 2 + c * 0.07)}" text-anchor="middle"
+         font-family="var(--font-deva)" font-size="${f(c * 0.185)}" font-weight="700"
+         fill="${MB.ink}">${label}</text></g>`;
+  });
+  // the diagonals that traditional charts draw across the mandala
+  out += `<path d="M ${f(-S / 2)} ${f(-S / 2)} L ${f(S / 2)} ${f(S / 2)}
+                   M ${f(S / 2)} ${f(-S / 2)} L ${f(-S / 2)} ${f(S / 2)}"
+            stroke="${MB.deepRed}" stroke-width="${f(sw * 0.55)}" opacity="0.4" fill="none"/>`;
   return out;
 }

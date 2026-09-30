@@ -9,7 +9,7 @@ import { escapeXml, PALETTE } from './kit.js';
 // compiled with libass (Homebrew's current bottle is not).
 // ---------------------------------------------------------------------------
 
-function wrap(str, cols) {
+export function wrap(str, cols) {
   const words = String(str).split(/\s+/);
   const out = [];
   let line = '';
@@ -77,10 +77,15 @@ export function addCaptions(stage, lines, timings, opts = {}) {
       markup = plate + body;
     }
 
+    // Anchor the block by its BOTTOM edge, not its centre. Centre-anchoring
+    // means a three-line caption grows downward and spills over the border,
+    // which is exactly what it did.
+    const anchoredY = baseY - blockH / 2;
+
     const el = stage.add({
       id: `caption-${l.id}`,
       svg: markup,
-      x: W / 2, y: baseY,
+      x: W / 2, y: anchoredY,
       layer,
       opacity: 0,
       shadow: style === 'outline' ? null : 'cut-shadow-sm',
@@ -90,7 +95,7 @@ export function addCaptions(stage, lines, timings, opts = {}) {
 
     const inDur = 0.18;
     if (pop) {
-      stage.tl.fromTo(el, { opacity: [0, 1], y: [baseY + 26, baseY], scale: [0.94, 1] },
+      stage.tl.fromTo(el, { opacity: [0, 1], y: [anchoredY + 26, anchoredY], scale: [0.94, 1] },
         { at: t.start - 0.1, dur: inDur, ease: 'outBack' });
     } else {
       stage.tl.fromTo(el, { opacity: [0, 1] }, { at: t.start - 0.1, dur: inDur });

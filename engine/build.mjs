@@ -222,6 +222,21 @@ async function main() {
     console.warn(`        and call addDisclaimer(stage, { at: <end of last line> }).`);
   }
 
+  // A caption that wraps past two lines is tall enough to reach up into the
+  // artwork, which is how narration ended up printed across the closing card.
+  try {
+    const { wrap } = await import('./captions.js');
+    const over = [];
+    for (const l of collectScript(ep)) {
+      const rows = wrap(l.caption ?? l.text, 40);
+      if (rows.length > 2) over.push(`${l.id} (${rows.length})`);
+    }
+    if (over.length) {
+      console.warn(`[build] WARNING: ${over.length} caption(s) wrap past two lines: ${over.join(', ')}`);
+      console.warn(`        run: node tools/check-captions.mjs ${a.episode}`);
+    }
+  } catch { /* non-fatal */ }
+
   // 3. Frames ----------------------------------------------------------------
   const videoFile = path.join(outDir, a.draft ? 'draft-silent.mp4' : 'silent.mp4');
   if (!a.skipRender) {

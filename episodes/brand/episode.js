@@ -16,8 +16,12 @@ export default {
   script: [],
   build({ stage, preset }) {
     const W = stage.width, H = stage.height, CX = W / 2, CY = H / 2;
-    const isLogo = Math.abs(W - H) < 2;
-    const isBanner = W / H > 1.6;
+    // Banner and thumbnail are both 16:9, so aspect ratio cannot tell them
+    // apart — it made the thumbnail branch unreachable. Go by preset name,
+    // falling back to size (banner 2048 wide, thumbnail 1280).
+    const kind = preset ?? (Math.abs(W - H) < 2 ? 'logo' : W >= 2000 ? 'banner' : 'thumb');
+    const isLogo = kind === 'logo';
+    const isBanner = kind === 'banner';
 
     stage.scene({ name: 'brand', from: 0, to: 2, build() {
       if (isLogo) {

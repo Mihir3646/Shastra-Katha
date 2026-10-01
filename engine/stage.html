@@ -96,6 +96,10 @@ const api = {
   stage,
   tl: stage.tl,
   preset,
+  /** the preset's NAME ('logo' | 'banner' | 'thumb' | ...). `preset` itself is
+   *  the {width,height,fps} object, which is easy to compare against by
+   *  mistake — banner and thumb are both 16:9, so size cannot tell them apart. */
+  presetName: presetName || episode.meta?.preset || 'shorts',
   /** true when rendering 9:16 — the same episode also cuts to Shorts */
   portrait,
   /**

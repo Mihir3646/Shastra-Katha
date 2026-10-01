@@ -14,12 +14,12 @@ export default {
   voice: { engine: 'parler' },
   captions: { enabled: false },
   script: [],
-  build({ stage, preset }) {
+  build({ stage, presetName }) {
     const W = stage.width, H = stage.height, CX = W / 2, CY = H / 2;
     // Banner and thumbnail are both 16:9, so aspect ratio cannot tell them
     // apart — it made the thumbnail branch unreachable. Go by preset name,
     // falling back to size (banner 2048 wide, thumbnail 1280).
-    const kind = preset ?? (Math.abs(W - H) < 2 ? 'logo' : W >= 2000 ? 'banner' : 'thumb');
+    const kind = presetName ?? (Math.abs(W - H) < 2 ? 'logo' : W >= 2000 ? 'banner' : 'thumb');
     const isLogo = kind === 'logo';
     const isBanner = kind === 'banner';
 
@@ -45,8 +45,8 @@ export default {
         // decoration, safely outside the mobile crop
         stage.add({ id: 'gridL', svg: mbVastuGrid(250, {
           labels: ['','','ईशान','','ब्रह्म','','','','आग्नेय'], highlight: 8, labelSize: 30,
-        }), x: sx * 0.5, y: CY - 90, layer: 2, rot: -4 });
-        stage.add({ id: 'chulhaL', svg: chulha(140), x: sx * 0.5, y: CY + 190, layer: 2 });
+        }), x: sx * 0.62, y: CY - 90, layer: 2, rot: -4 });
+        stage.add({ id: 'chulhaL', svg: chulha(140), x: sx * 0.62, y: CY + 190, layer: 2 });
         stage.add({ id: 'lotusR', svg: mbLotus(104), x: W - sx * 0.5, y: CY - 100, layer: 2 });
         stage.add({ id: 'fishR', svg: fish(140), x: W - sx * 0.5, y: CY + 110, layer: 2, rot: 6 });
 

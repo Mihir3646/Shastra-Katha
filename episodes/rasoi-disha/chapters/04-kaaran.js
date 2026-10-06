@@ -34,7 +34,7 @@ export default {
         tl.fromTo(stage.camera, { zoom: [1.0, 1.06] },
           { at: from, dur: (end('k13') + 0.4) - from, ease: 'inOutSine' });
 
-        const gs = pick(Math.min(W * 0.34, 440), Math.min(W * 0.66, 620));
+        const gs = pick(Math.min(W * 0.34, 440), Math.min(W * 0.52, 520));
         const c = gs / 3;
         const gy = pick(H * 0.46, H * 0.42);
         const gx = pick(W * 0.3, CX);
@@ -60,7 +60,7 @@ export default {
           id: 'k-said',
           svg: mbCard(pick(460, 580), pick(88, 100), MB.cream, { sw: 4.5, seed: 'sd' })
              + text('परंपरा का तर्क', { size: pick(34, 42), font: 'var(--font-deva)', fill: MB.inkSoft }),
-          x: pick(W * 0.74, CX), y: pick(H * 0.24, H * 0.76), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
+          x: pick(W * 0.74, CX), y: pick(H * 0.24, H * 0.625), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
         });
         tl.fromTo(said, { scale: [0.6, 1], opacity: [0, 1], rot: [-3, -1] }, { at: at('k2') + 1.4, dur: 0.4, ease: 'outBack' });
 
@@ -88,9 +88,13 @@ export default {
           id: 'k-verse',
           svg: mbCard(pick(520, 660), pick(84, 96), MB.ochre, { pattern: 'hline', sw: 4.5, seed: 'vs' })
              + text('श्लोक ४३', { size: pick(36, 44), font: 'var(--font-deva)', fill: MB.ink }),
-          x: pick(W * 0.74, CX), y: pick(H * 0.36, H * 0.86), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
+          x: pick(W * 0.74, CX), y: pick(H * 0.36, H * 0.725), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
         });
         tl.fromTo(verse, { scale: [0.6, 1], opacity: [0, 1], rot: [3, 1] }, { at: at('k4') + 1.8, dur: 0.45, ease: 'outBack' });
+
+        for (const el of [said, verse]) {
+          tl.to(el, { opacity: 0, scale: 0.94 }, { at: at('k9') - 0.3, dur: 0.4 });
+        }
 
         // three possible explanations, arriving one per line
         ['विस्तृत नक़्शा', 'कई परंपराएँ', 'ध्यान से पढ़ना'].forEach((t, i) => {
@@ -98,7 +102,7 @@ export default {
             id: `k-maybe${i}`,
             svg: mbCard(pick(400, 500), pick(74, 84), MB.cream, { sw: 4.5, seed: 'mb' + i })
                + text(t, { size: pick(32, 38), font: 'var(--font-deva)', fill: MB.ink }),
-            x: pick(W * 0.74, CX), y: pick(H * 0.52 + i * 0.1, H * 0.56 + i * 0.085), layer: 9, scale: 0, shadow: 'cut-shadow-sm',
+            x: pick(W * 0.74, CX), y: pick(H * (0.52 + i * 0.1), H * (0.59 + i * 0.072)), layer: 9, scale: 0, shadow: 'cut-shadow-sm',
           });
           tl.fromTo(el, { scale: [0.55, 1], opacity: [0, 1], rot: [i % 2 ? 3 : -3, i % 2 ? 1 : -1] },
             { at: at(['k9', 'k10', 'k11'][i]) + 0.5, dur: 0.42, ease: 'outBack' });

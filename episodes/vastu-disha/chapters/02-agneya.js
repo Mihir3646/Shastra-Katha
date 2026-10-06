@@ -74,7 +74,7 @@ export default {
             svg: mbCard(pick(300, 380), pick(62, 74), MB.cream, { pattern: null, sw: 4.5, seed: 'src' + i })
                + text(name, { size: pick(30, 36), font: 'var(--font-deva)', fill: MB.ink }),
             x: pick(W * 0.8, CX + (i ? 1 : -1) * W * 0.22),
-            y: pick(H * 0.3 + i * 0.13, H * 0.68), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
+            y: pick(H * (0.3 + i * 0.13), H * 0.68), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
           });
           tl.fromTo(el, { scale: [0, 1], rot: [(i ? 4 : -4), (i ? 1.5 : -1.5)] },
             { at: at('a2') + 0.15 + i * 0.75, dur: 0.4, ease: 'outBack' });

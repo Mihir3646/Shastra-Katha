@@ -50,7 +50,7 @@ export default {
             id: `g-meta${i}`,
             svg: mbCard(pick(320, 400), pick(72, 84), i ? MB.ochre : MB.green, { pattern: 'hatch2', sw: 4.5, seed: 'm' + i })
                + text(label, { size: pick(34, 42), font: 'var(--font-deva)', fill: MB.cream }),
-            x: pick(W * 0.24, CX), y: pick(H * 0.53 + i * 0.09, H * 0.6 + i * 0.09), layer: 7, scale: 0, shadow: 'cut-shadow-sm',
+            x: pick(W * 0.24, CX), y: pick(H * (0.53 + i * 0.09), H * (0.6 + i * 0.09)), layer: 7, scale: 0, shadow: 'cut-shadow-sm',
           });
           tl.fromTo(el, { scale: [0, 1], rot: [i ? 3 : -3, i ? 1 : -1] },
             { at: at(line) + off, dur: 0.45, ease: 'outBack' });

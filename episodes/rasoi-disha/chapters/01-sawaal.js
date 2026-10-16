@@ -26,76 +26,87 @@ export default {
         tl.fromTo(stage.camera, { zoom: [1.0, 1.10] },
           { at: 0, dur: end('s7') + 0.4, ease: 'inOutSine' });
 
-        // a kitchen, because that is what the question is about
+        // --- layout ------------------------------------------------------
+        const GS = pick(Math.min(W * 0.34, 440), Math.min(W * 0.62, 600));
+        const C  = GS / 3;
+        const GX = pick(W * 0.66, CX), GY = pick(H * 0.52, H * 0.46);
+        // the south-east cell of the plan — where the answer ends up
+        const SEX = GX + C, SEY = GY + C;
+        // where the stove starts: out on its own, being cooked on
+        const HX = pick(W * 0.22, CX), HY = pick(H * 0.5, H * 0.2);
+
         const stove = stage.add({
-          id: 'sw-chulha', svg: chulha(pick(300, 340)),
-          x: pick(W * 0.26, CX), y: pick(H * 0.56, H * 0.19), layer: 6, scale: 0, shadow: 'cut-shadow',
+          id: 'sw-chulha', svg: chulha(pick(290, 330)),
+          x: HX, y: HY, layer: 9, scale: 0, shadow: 'cut-shadow',
         });
-        Motion.fly(tl, stove, { at: 0.3, dur: 1.0, dir: 'l', dist: 540, arc: 90, spin: 10 });
+        Motion.fly(tl, stove, { at: 0.3, dur: 1.0, dir: 'l', dist: 500, arc: 80, spin: 8 });
 
         const flame = stage.add({
           id: 'sw-flame',
           svg: ink('M 0 -54 Q 21 -19, 0 8 Q -21 -19, 0 -54 Z', MB.ochre, { sw: 3.5 })
              + ink('M 0 -35 Q 10 -13, 0 4 Q -10 -13, 0 -35 Z', MB.red, { sw: 3 }),
-          x: pick(W * 0.26, CX), y: pick(H * 0.56, H * 0.19) + pick(8, 10), layer: 7, scale: 0, boil: false,
+          x: HX, y: HY + pick(8, 10), layer: 10, scale: 0, boil: false,
         });
-        tl.fromTo(flame, { scale: [0, 1] }, { at: 1.25, dur: 0.45, ease: 'outBack' });
-        Motion.flicker(tl, flame, { at: 1.6, amp: 0.13, speed: 9 });
+        tl.fromTo(flame, { scale: [0, 1] }, { at: 1.2, dur: 0.45, ease: 'outBack' });
+        Motion.flicker(tl, flame, { at: 1.7, amp: 0.13, speed: 9 });
 
-        // the question itself
         const q = stage.add({
           id: 'sw-q',
-          svg: text('रसोई किस दिशा में?', { size: pick(66, 86), font: 'var(--font-deva)', fill: MB.ink }),
-          x: pick(W * 0.7, CX), y: pick(H * 0.3, H * 0.665), layer: 8, opacity: 0,
+          svg: text('रसोई किस दिशा में?', { size: pick(60, 80), font: 'var(--font-deva)', fill: MB.ink }),
+          x: pick(W * 0.66, CX), y: pick(H * 0.16, H * 0.1), layer: 8, opacity: 0,
         });
-        tl.fromTo(q, { opacity: [0, 1], scale: [0.9, 1], y: [q.y + 26, q.y] }, { at: at('s1') - 0.1, dur: 0.8, ease: 'outCubic' });
-        Motion.sway(tl, q, { amp: 0.9, period: 5, at: at('s1') + 0.8 });
+        tl.fromTo(q, { opacity: [0, 1], y: [q.y + 24, q.y] }, { at: at('s1') - 0.1, dur: 0.8, ease: 'outCubic' });
 
-        // the answer everybody already has
-        const grid = stage.add({
-          id: 'sw-grid',
-          svg: mbVastuGrid(pick(Math.min(W * 0.3, 400), Math.min(W * 0.66, 620)), {
-            labels: ['वायव्य','उत्तर','ईशान','पश्चिम','ब्रह्म','पूर्व','नैऋत्य','दक्षिण','आग्नेय'],
-          }),
-          x: pick(W * 0.7, CX), y: pick(H * 0.58, H * 0.47), layer: 5, opacity: 0, shadow: 'cut-shadow',
+        // --- the plan, drawn as the viewer watches ------------------------
+        // Not a diagram that appears: a square that gets divided. This is the
+        // chapter's one real "interactive" beat — the viewer sees the system
+        // being built before anything is claimed about it.
+        const plan = stage.add({
+          id: 'sw-plan',
+          svg: mbVastuGrid(GS, { labels: ['वायव्य','उत्तर','ईशान','पश्चिम','ब्रह्म','पूर्व','नैऋत्य','दक्षिण','आग्नेय'] }),
+          x: GX, y: GY, layer: 4, opacity: 0, shadow: 'cut-shadow',
         });
-        // the grid inks itself in rather than fading up — the one move that reads
-        // as handmade, which is what this style has been promising all along
-        Motion.drawOn(tl, grid, { at: at('s1') + 0.5, dur: 2.4, fade: 0.5 });
-        Motion.sway(tl, grid, { amp: 1.2, period: 5.5, at: at('s1') + 2.8 });
+        Motion.drawOn(tl, plan, { at: at('s1') + 0.7, dur: 2.2, fade: 0.5 });
+        Motion.sway(tl, plan, { amp: 0.8, period: 7, at: at('s1') + 3.2 });
 
-        // the answer itself — the corner lights up on the line that names it
-        const gs1 = pick(Math.min(W * 0.3, 400), Math.min(W * 0.66, 620)), c1 = gs1 / 3;
-        const gx1 = pick(W * 0.7, CX), gy1 = pick(H * 0.58, H * 0.47);
-        const hit = stage.add({
-          id: 'sw-hit',
-          svg: ink(`M ${-c1 * 0.46} ${-c1 * 0.46} H ${c1 * 0.46} V ${c1 * 0.46} H ${-c1 * 0.46} Z`, MB.deepRed, { pattern: 'hatch', sw: 5 })
-             + text('आग्नेय', { size: c1 * 0.2, font: 'var(--font-deva)', fill: MB.cream }),
-          x: gx1 + c1, y: gy1 + c1, layer: 7, scale: 0, opacity: 0, shadow: 'cut-shadow-sm',
-        });
-        tl.fromTo(hit, { scale: [2.1, 1], opacity: [0, 1], rot: [7, -1] },
-          { at: at('s5') + 0.9, dur: 0.6, ease: 'outBack' });
-        // the grid and the stove flinch as the corner lands on them
-        Motion.recoil(tl, [grid, stove], { at: at('s5') + 1.02, amp: 7 });
-        tl.drive(hit, (l, g, s2) => { s2.scale = 1 + Math.sin(g * 3.1) * 0.035; }, { at: at('s5') + 1.5 });
+        // --- the answer: the kitchen MOVES to where the text puts it -------
+        // Saying "south-east" and lighting a cell is a caption. Walking the
+        // stove into that cell is the same fact, demonstrated.
+        const SETTLE = at('s5') + 0.55;
+        tl.to(stove, { x: SEX, y: SEY - C * 0.04, scale: C / 330 * 0.92, rot: 0 },
+          { at: SETTLE, dur: 1.15, ease: 'inOutCubic' });
+        tl.to(flame, { x: SEX, y: SEY + C * 0.12, scale: C / 330 * 0.92 },
+          { at: SETTLE, dur: 1.15, ease: 'inOutCubic' });
 
-        // "says who?" — the question the channel exists to answer
-        const ask = stage.add({
-          id: 'sw-ask',
-          svg: mbCard(pick(470, 620), pick(100, 120), MB.cream, { sw: 5, seed: 'ask' })
-             + text('दक्षिण-पूर्व', { size: pick(44, 54), font: 'var(--font-deva)', fill: MB.deepRed }),
-          x: pick(W * 0.28, CX), y: pick(H * 0.72, H * 0.70), layer: 9, scale: 0, shadow: 'cut-shadow',
+        // the cell accepts it, and the plan flinches as it lands
+        const cell = stage.add({
+          id: 'sw-cell',
+          svg: ink(`M ${-C * 0.46} ${-C * 0.46} H ${C * 0.46} V ${C * 0.46} H ${-C * 0.46} Z`,
+                   MB.yellow, { pattern: 'dots', sw: 5 }),
+          x: SEX, y: SEY, layer: 5, opacity: 0, scale: 0,
         });
-        Motion.fly(tl, ask, { at: at('s5') + 0.35, dur: 0.85, dir: 'b', dist: 320, arc: 40, spin: 8 });
-        tl.drive(ask, (l, g, s) => { s.scale = 1 + Math.sin(g * 3.2) * 0.02; }, { at: at('s5') + 1.1 });
-        if (pick(false, true)) tl.to(q, { opacity: 0 }, { at: at('s5') + 0.3, dur: 0.35 });
-        tl.to(ask, { opacity: 0, scale: 0.9 }, { at: at('s7') - 0.3, dur: 0.35 });
+        tl.fromTo(cell, { opacity: [0, 1], scale: [0.6, 1] },
+          { at: SETTLE + 1.0, dur: 0.45, ease: 'outBack' });
+        Motion.recoil(tl, [plan], { at: SETTLE + 1.12, amp: 8 });
 
-        const band = stage.add({
-          id: 'sw-band', svg: mbBand(pick(430, 560), { h: 20, fill: MB.ochre, pattern: 'chevron' }),
-          x: pick(W * 0.26, CX), y: pick(H * 0.72, H * 0.86), layer: 7, scaleX: 0,
+        const tag = stage.add({
+          id: 'sw-tag',
+          svg: mbCard(pick(400, 520), pick(92, 110), MB.cream, { sw: 5, seed: 'tag' })
+             + text('दक्षिण-पूर्व', { size: pick(42, 52), font: 'var(--font-deva)', fill: MB.deepRed }),
+          x: pick(W * 0.24, CX), y: pick(H * 0.72, H * 0.74), layer: 9, scale: 0, shadow: 'cut-shadow',
         });
-        tl.fromTo(band, { scaleX: [0, 1] }, { at: at('s7'), dur: 0.5, ease: 'outQuart' });
+        Motion.fly(tl, tag, { at: SETTLE + 1.15, dur: 0.8, dir: 'b', dist: 280, arc: 30, spin: 6 });
+
+        // --- and there are three more rooms, which is chapter 2 ------------
+        const more = ['देवता', 'बर्तन', 'कोष'].map((t, i) => stage.add({
+          id: `sw-more${i}`,
+          svg: mbCard(pick(190, 230), pick(66, 76), MB.ochre, { pattern: 'dots', sw: 4, seed: 'm' + i })
+             + text(t, { size: pick(30, 36), font: 'var(--font-deva)', fill: MB.ink }),
+          x: pick(W * 0.24, CX * 0.55 + i * CX * 0.45), y: pick(H * 0.30 + i * 0.1, H * 0.86),
+          layer: 8, scale: 0, shadow: 'cut-shadow-sm',
+        }));
+        tl.stagger(more, { scale: [0.5, 1], opacity: [0, 1] },
+          { at: at('s7') + 0.5, each: 0.18, dur: 0.5, ease: 'outBack' });
 
         fade(stage, { at: 0, dur: 0.6, to: 'in' });
       },

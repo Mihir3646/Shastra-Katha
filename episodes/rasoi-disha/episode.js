@@ -25,7 +25,9 @@ export default {
     bg: '#EFE0C0',
     leadIn: 0.8,
     tailOut: 5.8,        // room for the disclaimer card
-    boil: { enabled: true, fps: 11, pos: 1.5, rot: 0.32 },
+    // Was fps 11 / pos 1.5 / rot 0.32, which made the boil the loudest motion in
+    // the file — 72% of all pixel change — and read as shaking rather than paper.
+    boil: { enabled: true, fps: 6, pos: 0.55, rot: 0.1 },
   },
 
   voice: {

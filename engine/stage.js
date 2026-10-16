@@ -49,7 +49,7 @@ export class Stage {
       opacity: spec.opacity ?? 1,
       layer: spec.layer ?? 0,
       shadow: spec.shadow ?? null,        // 'cut-shadow' | 'cut-shadow-sm' | 'cut-shadow-lg' | null
-      boil: spec.boil ?? true,
+      boil: spec.boil ?? !isTypeOnly(spec.svg),
       visible: spec.visible ?? true,
       _order: this.elements.length,
     };
@@ -196,6 +196,16 @@ export class Stage {
 
 // --- Motion presets ---------------------------------------------------------
 // Named so episodes read like a shot list rather than a pile of tween configs.
+
+/**
+ * True when an svg fragment is nothing but type. Jittering glyphs reads as
+ * encoding noise rather than paper, and on Devanagari it costs legibility,
+ * so these are excluded from the boil by default.
+ */
+function isTypeOnly(svg) {
+  if (!svg) return false;
+  return !/<(path|rect|circle|ellipse|polygon|polyline|line|image|use)\b/i.test(svg);
+}
 
 export const Motion = {
   /**

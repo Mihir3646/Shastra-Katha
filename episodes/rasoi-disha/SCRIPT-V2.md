@@ -59,30 +59,32 @@ Where the directions come from. Kept from v1 — this chapter tested fine.
 | `v9` | इक्यासी खाने। बत्तीस देवता बाहर, तेरह भीतर। |
 | `v10` | और हर खाने का अपना अधिपति। |
 
-## Chapter 4 — खाना नंबर एक (2:45–3:55)
+## Chapter 4 — पूरा नक़्शा (2:45–3:45)
 
-**The chapter that changed most.** v1 compressed this to "यह क्रम थोड़ा अलग
-मिलता है" — four seconds, and the words अग्नि and वायु never spoken. Here the
-deities are named, the squares are numbered, and the discrepancy is said out
-loud. Note `k6` and `k7`: it is framed as *what this translation says*, never
-as what the text definitively says — the research file is explicit that 53.43
-needs a second source before we assert anything.
+**Rewritten.** The earlier draft made the Agni/Vāyu discrepancy the centrepiece.
+Dropped, for two reasons: it frames the shastra as self-contradictory, and we
+have not verified it — `REFERENCES.md` says to check 53.43 against Mayamatam or
+Mānasāra first. The likeliest explanation is that Iyer's 1884 square-numbering
+differs from modern usage, not that the tradition is wrong. Publishing it would
+most likely be publishing our own error as a correction to scripture.
+
+Same material, positive frame: the system's completeness. `k9`–`k11` keep the
+channel's one real distinction — text and tradition are both named, and neither
+is called wrong.
 
 | id | line |
 |---|---|
-| `k1` | अब लौटते हैं उस कारण पर, जो आपने सुना है। |
-| `k2` | कहा जाता है — रसोई दक्षिण-पूर्व में इसलिए, क्योंकि वहाँ अग्नि बैठते हैं। |
-| `k3` | श्लोक तैंतालीस वही गिनती देता है। आइए उसे पढ़ लें। |
-| `k4` | खाना एक — उत्तर-पूर्व का कोना। खाना नौ — दक्षिण-पूर्व। |
-| `k5` | पूरब के पहले आठ खानों के देवता — अग्नि, पर्जन्य, जयंत, इंद्र, सूर्य, सत्या, भृश, अंतरिक्ष। |
-| `k6` | ध्यान दीजिए। इस अनुवाद में अग्नि खाना एक पर हैं — उत्तर-पूर्व में। |
-| `k7` | और दक्षिण-पूर्व, खाना नौ पर, इसी अनुवाद के अनुसार — वायु। |
-| `k8` | यह उस परंपरा से उल्टा है, जो हम सब जानते हैं। |
-| `k9` | इसके तीन कारण हो सकते हैं। |
-| `k10` | एक — अठारह सौ चौरासी के इस अनुवाद में खानों की गिनती बाद की रीति से अलग हो। |
-| `k11` | दो — छपाई में चूक रह गई हो। |
-| `k12` | तीन — पाठ सचमुच यही कहता हो, और प्रचलित मान्यता बाद में बनी हो। |
-| `k13` | हम नहीं जानते कि कौन-सी सही है। मयमतम् या मानसार से मिलाने पर ही पता चलेगा। |
+| `k1` | अब देखिए, यह शास्त्र कितना विस्तृत है। |
+| `k2` | इक्यासी खानों में से हर एक का अपना देवता है। |
+| `k3` | ग्रंथ उन्हें गिनाता भी है। |
+| `k4` | पूरब की पहली पंक्ति के आठ नाम — अग्नि, पर्जन्य, जयंत, इंद्र, सूर्य, सत्या, भृश, और अंतरिक्ष। |
+| `k5` | आठ खाने, आठ नाम। अध्याय तिरपन, श्लोक तैंतालीस। |
+| `k6` | बत्तीस देवता बाहर के खानों में, तेरह भीतर। |
+| `k7` | यानी रसोई का नियम अकेला नियम नहीं है। |
+| `k8` | वह एक पूरी व्यवस्था का हिस्सा है। |
+| `k9` | और परंपरा इस दिशा को अग्नि से जोड़ती है — इसीलिए आग्नेय। |
+| `k10` | दिशा ग्रंथ में लिखी है। यह जोड़ परंपरा से आता है। |
+| `k11` | दोनों का अपना स्थान है, और दोनों साथ चलते हैं। |
 
 ## Chapter 5 — आपके घर में (3:55–5:00)
 
@@ -129,9 +131,9 @@ Carrying a numeral, which 35% of million-view titles in this niche do:
 
 ## What I deliberately did NOT do
 
-- **Did not assert the reversal as fact.** `research/REFERENCES.md` says to check
-  53.43 against Mayamatam or Mānasāra before building on it. `k6`/`k7` say "इस
-  अनुवाद में" every time.
+- **Did not broadcast the 53.43 discrepancy at all.** It stays an open research
+  note until a second source settles it. Reporting it would cast the shastra as
+  inconsistent on the strength of one unverified 1884 translation.
 - **Did not read 53.119 aloud.** It lists outcomes — death of sons, poverty,
   "unchastity among women". That is fear content, it is what the channel exists
   not to be, and it runs into your note about not casting the shastra badly.

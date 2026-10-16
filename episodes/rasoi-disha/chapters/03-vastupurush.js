@@ -9,30 +9,28 @@ export default {
   title: 'वास्तुपुरुष',
   short: true,
   script: [
-    { id: 'v1', text: 'पर यह नियम आया कहाँ से? इसके लिए उसी अध्याय में थोड़ा पीछे जाना होगा।', gap: 0.45 },
-    { id: 'v2', text: 'दूसरे श्लोक में एक सुंदर कथा है।' },
+    { id: 'v1', text: 'अब सवाल यह है कि ये दिशाएँ तय कैसे हुईं।', gap: 0.4 },
+    { id: 'v2', text: 'उसी अध्याय में, दूसरे श्लोक में एक कथा है।' },
     { id: 'v3', text: 'एक विशाल आकृति प्रकट हुई, जिसने आकाश और पृथ्वी दोनों को ढक लिया।' },
-    { id: 'v4', text: 'देवताओं ने उसके अलग-अलग अंग थामे, और उसे भूमि पर स्थापित किया।', gap: 0.4 },
+    { id: 'v4', text: 'देवताओं ने उसके अलग-अलग अंग थामे, और उसे भूमि पर औंधा लिटा दिया।', gap: 0.4 },
     { id: 'v5', text: 'फिर हर देवता वहीं विराजमान हो गया, जहाँ उसने थामा था।' },
     { id: 'v6', text: 'ग्रंथ उसे नाम देता है — वास्तुपुरुष।', gap: 0.5 },
-    { id: 'v7', text: 'इसके बाद बयालीसवें श्लोक में पूरी व्यवस्था बनती है।' },
-    { id: 'v8', text: 'भूमि को दस-दस रेखाओं से काटकर इक्यासी खानों में बाँटा जाता है।' },
-    { id: 'v9', text: 'बत्तीस देवता बाहरी खानों में, तेरह भीतरी खानों में। और ठीक बीच में ब्रह्मा।', gap: 0.45 },
-    { id: 'v10', text: 'यही वास्तु का असली ढाँचा है।' },
-    { id: 'v11', text: 'घर की भूमि को एक शरीर की तरह देखा जाता है, जिसके हर हिस्से का अपना अधिपति है।' },
-    { id: 'v12', text: 'रसोई, भंडार, पूजा का स्थान — ये सब इसी नक़्शे से तय होते हैं।' },
+    { id: 'v7', text: 'श्लोक बयालीस में उसी पर नक़्शा बनता है।' },
+    { id: 'v8', text: 'दस रेखाएँ पूरब से पश्चिम। दस रेखाएँ उत्तर से दक्षिण।', gap: 0.4 },
+    { id: 'v9', text: 'इक्यासी खाने। बत्तीस देवता बाहर, तेरह भीतर।' },
+    { id: 'v10', text: 'और हर खाने का अपना अधिपति।' },
   ],
   build({ stage, tl, at, end, from, pick }) {
     const W = stage.width, H = stage.height, CX = W / 2;
     tearWipe(stage, { at: from - 0.5, color: '#DCC9A4', dir: 'up', seed: 'w-v', travel: 0.45 });
 
     stage.scene({
-      name: 'vastupurush', from: from - 0.25, to: end('v12') + 0.4,
+      name: 'vastupurush', from: from - 0.25, to: end('v10') + 0.4,
       build() {
         stage.add({ id: 'v-bg', svg: `<rect width="${W}" height="${H}" fill="#DCC9A4"/>`, x: 0, y: 0, layer: 0, boil: false });
         stage.add({ id: 'v-border', svg: mbBorder(W, H, { fill: MB.plum ?? MB.indigo, pattern: 'net' }), x: 0, y: 0, layer: 60, boil: false });
         tl.fromTo(stage.camera, { zoom: [1.0, 1.07], y: [0, 14] },
-          { at: from, dur: (end('v12') + 0.4) - from, ease: 'inOutSine' });
+          { at: from, dur: (end('v10') + 0.4) - from, ease: 'inOutSine' });
 
         const gs = pick(Math.min(W * 0.32, 420), Math.min(W * 0.64, 620));
         const gy = pick(H * 0.48, H * 0.44);
@@ -87,7 +85,7 @@ export default {
              + text('८१', { size: pick(62, 76), font: 'var(--font-deva)', fill: MB.ink }),
           x: pick(W * 0.75, CX - W * 0.32), y: pick(H * 0.48, H * 0.14), layer: 9, scale: 0, shadow: 'cut-shadow',
         });
-        tl.fromTo(count, { scale: [1.8, 1], opacity: [0, 1], rot: [-8, -2] }, { at: at('v8') + 1.6, dur: 0.5, ease: 'outBack' });
+        tl.fromTo(count, { scale: [1.8, 1], opacity: [0, 1], rot: [-8, -2] }, { at: at('v9') + 1.6, dur: 0.5, ease: 'outBack' });
 
         const band = stage.add({
           id: 'v-band', svg: mbBand(pick(380, 500), { h: 18, fill: MB.ochre, pattern: 'chevron' }),

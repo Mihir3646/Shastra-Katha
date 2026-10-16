@@ -8,31 +8,26 @@ export default {
   title: 'ग्रंथ',
   short: true,
   script: [
-    { id: 'g1', text: 'ग्रंथ का नाम है — बृहत् संहिता।', gap: 0.4 },
-    { id: 'g2', text: 'लेखक वराहमिहिर। समय, छठी शताब्दी। यानी लगभग पंद्रह सौ साल पुराना।' },
-    { id: 'g3', text: 'यह मुख्य रूप से ज्योतिष का ग्रंथ है। ग्रह, नक्षत्र, वर्षा, खेती।' },
-    { id: 'g4', text: 'पर इसका तिरपनवाँ अध्याय पूरा का पूरा घर बनाने पर है।', gap: 0.45 },
-    { id: 'g5', text: 'और उस अध्याय की पहली ही पंक्ति एक शब्द इस्तेमाल करती है — वास्तुविद्या।' },
-    { id: 'g6', text: 'विद्या। यानी सीखी और सिखाई जाने वाली व्यवस्थित जानकारी।' },
-    { id: 'g7', text: 'ग्रंथ खुद इसे अंधविश्वास नहीं, एक शास्त्र मानता है।', gap: 0.5 },
-    { id: 'g8', text: 'अब उसी अध्याय के एक सौ अठारहवें श्लोक पर आइए।' },
-    { id: 'g9', text: 'अनुवाद है — देवताओं का स्थान ईशान कोण में बने।' },
-    { id: 'g10', text: 'रसोई दक्षिण-पूर्व में। घर के बर्तनों का कमरा नैऋत्य में।' },
-    { id: 'g11', text: 'और कोष तथा अनाज का भंडार वायव्य कोण में।', gap: 0.5 },
-    { id: 'g12', text: 'बस। यही वह पंक्ति है जिससे यह पूरा नियम निकलता है।' },
-    { id: 'g13', text: 'बृहत् संहिता, अध्याय तिरपन, श्लोक एक सौ अठारह। लिंक नीचे है।' },
+    { id: 'g1', text: 'देवताओं का स्थान — उत्तर-पूर्व।', gap: 0.35 },
+    { id: 'g2', text: 'रसोई — दक्षिण-पूर्व।', gap: 0.35 },
+    { id: 'g3', text: 'बर्तन और घर के सामान का कमरा — दक्षिण-पश्चिम।', gap: 0.35 },
+    { id: 'g4', text: 'कोष और अनाज — उत्तर-पश्चिम।', gap: 0.45 },
+    { id: 'g5', text: 'चारों एक ही पंक्ति में। अध्याय तिरपन, श्लोक एक सौ अठारह।', gap: 0.5 },
+    { id: 'g6', text: 'ग्रंथ है बृहत् संहिता। लेखक — वराहमिहिर। समय — छठी शताब्दी।' },
+    { id: 'g7', text: 'यानी लगभग पंद्रह सौ साल पुराना।', gap: 0.4 },
+    { id: 'g8', text: 'अनुवाद मुफ़्त में उपलब्ध है। लिंक नीचे है — ख़ुद मिला लीजिए।' },
   ],
   build({ stage, tl, at, end, from, pick }) {
     const W = stage.width, H = stage.height, CX = W / 2;
     tearWipe(stage, { at: from - 0.5, color: '#E7D3B4', dir: 'up', seed: 'w-g', travel: 0.45 });
 
     stage.scene({
-      name: 'granth', from: from - 0.25, to: end('g13') + 0.4,
+      name: 'granth', from: from - 0.25, to: end('g8') + 0.4,
       build() {
         stage.add({ id: 'g-bg', svg: `<rect width="${W}" height="${H}" fill="#E7D3B4"/>`, x: 0, y: 0, layer: 0, boil: false });
         stage.add({ id: 'g-border', svg: mbBorder(W, H, { fill: MB.indigo }), x: 0, y: 0, layer: 60, boil: false });
         tl.fromTo(stage.camera, { zoom: [1.0, 1.06], y: [0, -12] },
-          { at: from, dur: (end('g13') + 0.4) - from, ease: 'inOutSine' });
+          { at: from, dur: (end('g8') + 0.4) - from, ease: 'inOutSine' });
 
         // the book itself
         const book = stage.add({
@@ -64,8 +59,8 @@ export default {
           x: pick(W * 0.72, CX), y: pick(H * 0.28, H * 0.8), layer: 8, scale: 0, shadow: 'cut-shadow',
         });
         tl.fromTo(vidya, { scale: [2.4, 1], opacity: [0, 1], rot: [6, -1.5] },
-          { at: at('g5') + 1.6, dur: 0.5, ease: 'outBack' });
-        tl.drive(vidya, (l, g, s) => { s.scale = 1 + Math.sin(g * 2.8) * 0.022; }, { at: at('g5') + 2.2 });
+          { at: at('g6') + 1.6, dur: 0.5, ease: 'outBack' });
+        tl.drive(vidya, (l, g, s) => { s.scale = 1 + Math.sin(g * 2.8) * 0.022; }, { at: at('g6') + 2.2 });
 
         // the verse, built line by line as each room is named
         const rooms = [
@@ -91,7 +86,7 @@ export default {
                + text(label, { size: c * 0.19, font: 'var(--font-deva)', fill: MB.cream }),
             x: gx + (col - 1) * c, y: gy + (row - 1) * c, layer: 6, scale: 0, shadow: 'cut-shadow-sm',
           });
-          const cue = i === 0 ? at('g9') + 0.7 : i === 1 ? at('g10') + 0.2 : i === 2 ? at('g10') + 2.2 : at('g11') + 0.5;
+          const cue = i === 0 ? at('g1') + 0.7 : i === 1 ? at('g2') + 0.2 : i === 2 ? at('g2') + 2.2 : at('g4') + 0.5;
           tl.fromTo(el, { scale: [1.9, 1], opacity: [0, 1], rot: [i % 2 ? 4 : -4, 0] },
             { at: cue, dur: 0.4, ease: 'outBack' });
           if (i === 1) tl.drive(el, (l, g, s) => { s.scale = 1 + Math.sin(g * 3) * 0.035; }, { at: cue + 0.5 });
@@ -105,7 +100,7 @@ export default {
           x: CX, y: pick(H * 0.8, H * 0.74), layer: 9, opacity: 0, shadow: 'cut-shadow-sm',
         });
         tl.fromTo(cite, { opacity: [0, 1], y: [pick(H * 0.83, H * 0.77), pick(H * 0.8, H * 0.74)] },
-          { at: at('g12') + 0.3, dur: 0.45, ease: 'outCubic' });
+          { at: at('g6') + 0.3, dur: 0.45, ease: 'outCubic' });
       },
     });
   },

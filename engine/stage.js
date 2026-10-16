@@ -1,3 +1,4 @@
+import { resolveEase } from './ease.js';
 import { Timeline } from './timeline.js';
 import { paperTextureDataURL, shadowDefs, halftonePattern, newsprintPattern, woodPattern, gridPattern } from './paper.js';
 import { Rng, hashSeed } from './prng.js';
@@ -197,6 +198,70 @@ export class Stage {
 // Named so episodes read like a shot list rather than a pile of tween configs.
 
 export const Motion = {
+  /**
+   * Arrives from off-frame on a bowed path and settles.
+   *
+   * The arc is free: x and y run on different curves, so the path bows instead
+   * of running straight. The rotation runs LONGER than the body, and that
+   * overhang is the follow-through — it is what separates "animated" from
+   * "a card appeared".
+   */
+  fly(tl, el, { at = 0, dur = 0.8, dir = 'l', dist = 560, arc = 120, spin = 14,
+                ease = 'outQuint' } = {}) {
+    const x0 = el.x, y0 = el.y, r0 = el.rot;
+    // Elements are conventionally authored at `scale: 0` so they start hidden,
+    // which means el.scale reads 0 here. Tween to 1 in that case or the thing
+    // flies into place and is never visible.
+    const s1 = el.scale || 1;
+    const dx = dir === 'l' ? -dist : dir === 'r' ? dist : 0;
+    const dy = dir === 't' ? -dist : dir === 'b' ? dist : 0;
+    tl.fromTo(el, { x: [x0 + dx, x0], scale: [s1 * 0.86, s1], opacity: [0, el.opacity || 1] },
+      { at, dur, ease });
+    tl.fromTo(el, { y: [y0 + dy - arc, y0] }, { at, dur, ease: 'outBack' });
+    tl.fromTo(el, { rot: [r0 + spin, r0] }, { at, dur: dur * 1.35, ease: 'outElastic' });
+    return tl;
+  },
+
+  /**
+   * Everything already on screen flinches when something lands near it.
+   *
+   * ADDITIVE (`s.y +=`) on purpose: an absolute driver would silently clobber
+   * sway, which writes y absolutely. seek() resets to base and replays clips
+   * in order, so additive drivers compose and absolute ones fight.
+   */
+  recoil(tl, els, { at = 0, amp = 6, dur = 0.55, decay = 9, freq = 28 } = {}) {
+    for (const el of [].concat(els)) {
+      tl.drive(el, (local, global, s) => {
+        s.y += Math.exp(-local * decay) * Math.sin(local * freq) * amp;
+      }, { at, dur });
+    }
+    return tl;
+  },
+
+  /**
+   * Strokes tagged `.mb-draw` draw themselves on, stroke by stroke.
+   *
+   * This is the one move that reads as handmade rather than rendered, which is
+   * what the Madhubani style promises and never delivered. Pure function of
+   * `local`, so it still seeks deterministically; getTotalLength is cached per
+   * node, per worker.
+   */
+  drawOn(tl, el, { at = 0, dur = 1.2, ease = 'outCubic', fade = 0.45 } = {}) {
+    const e = resolveEase(ease);
+    if (fade) tl.fromTo(el, { opacity: [0, el.opacity || 1] }, { at, dur: fade, ease: 'outCubic' });
+    tl.drive(el, (local, global, s) => {
+      const n = s._node; if (!n) return;
+      const paths = n._mbDraw ?? (n._mbDraw = [...n.querySelectorAll('.mb-draw')]);
+      const p = e(Math.min(1, local / dur));
+      for (const q of paths) {
+        const L = q._len ?? (q._len = q.getTotalLength());
+        q.style.strokeDasharray = L;
+        q.style.strokeDashoffset = L * (1 - p);
+      }
+    }, { at, dur });
+    return tl;
+  },
+
   /** Stamped onto the page: scale overshoot + a settle rotation. */
   stamp(tl, el, { at = 0, dur = 0.42, from = 0.55, rot = 0 } = {}) {
     const r = el.rot;

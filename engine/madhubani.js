@@ -80,7 +80,7 @@ export function ink(d, fill, opts = {}) {
   let out = `<path d="${d}" fill="${fill}"/>`;
   if (pattern) out += `<path d="${d}" fill="url(#mb-${pattern})"/>`;
   if (inner) out += inner;
-  out += `<path d="${d}" fill="none" stroke="${stroke}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+  out += `<path d="${d}" fill="none" stroke="${stroke}" stroke-width="${sw}" stroke-linejoin="round" class="mb-draw"/>`;
   return out;
 }
 

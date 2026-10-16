@@ -127,6 +127,66 @@ async function probeDuration(file) {
   return parseFloat(out.trim());
 }
 
+/**
+ * Narration + music, mixed the same way everywhere.
+ *
+ * Shorts used to get narration only, because the mix lived inline in the
+ * long-form path and the Short branch returned before reaching it. A Short
+ * with no bed sounds bare next to the video it was cut from, so both paths
+ * now come through here and get the identical chain.
+ */
+async function mixAudio({ narration, musicFile, gain = 0.13, dur, out }) {
+  const hasNarration = narration && existsSync(narration);
+  const hasMusic = musicFile && existsSync(musicFile);
+  // null = nothing to mix. A boolean = mixed, and says whether a bed went under.
+  if (!hasNarration && !hasMusic) return null;
+
+  const args = ['-y', '-v', 'error'];
+  const filters = [];
+  let narrLabel = null, musicLabel = null, idx = 0;
+
+  if (hasNarration) {
+    args.push('-i', narration);
+    filters.push(`[${idx}:a]aresample=48000,apad,atrim=0:${dur},aformat=channel_layouts=stereo[narr]`);
+    narrLabel = 'narr'; idx++;
+  }
+  if (hasMusic) {
+    const fadeOut = Math.max(0, dur - 2.2);
+    args.push('-stream_loop', '-1', '-i', musicFile);
+    // Carve the speech band OUT of the music rather than only turning it down.
+    // Level alone is not enough: a sustained drone sits right on top of the
+    // voice, and at phrase-ends where the voice trails off they converge.
+    // Notching 500/1600/3000 Hz gives separation by frequency, which survives
+    // the moments where separation by level does not.
+    filters.push(
+      `[${idx}:a]aresample=48000,atrim=0:${dur},aformat=channel_layouts=stereo,` +
+      `highpass=f=70,` +
+      `equalizer=f=500:width_type=o:width=1.6:g=-5,` +
+      `equalizer=f=1600:width_type=o:width=1.8:g=-9,` +
+      `equalizer=f=3000:width_type=o:width=1.4:g=-5,` +
+      `volume=${gain},afade=t=in:st=0:d=1.2,afade=t=out:st=${fadeOut.toFixed(2)}:d=2.2[music]`
+    );
+    musicLabel = 'music'; idx++;
+  }
+
+  if (narrLabel && musicLabel) {
+    // Duck the bed under the voice rather than just turning it down.
+    filters.push(`[${narrLabel}]asplit=2[nA][nB]`);
+    // Duck harder and hold longer: the previous settings let the bed back up
+    // between phrases, which is exactly where it was masking words.
+    filters.push(`[${musicLabel}][nB]sidechaincompress=threshold=0.015:ratio=16:attack=8:release=700:makeup=1:detection=rms[duck]`);
+    filters.push(`[nA][duck]amix=inputs=2:normalize=0:dropout_transition=0[pre]`);
+  } else {
+    filters.push(`[${narrLabel ?? musicLabel}]anull[pre]`);
+  }
+  // YouTube normalises to about -14 LUFS; hand it that and it leaves us alone.
+  filters.push(`[pre]loudnorm=I=-14:TP=-1.5:LRA=11[out]`);
+
+  args.push('-filter_complex', filters.join(';'), '-map', '[out]', '-ac', '2', '-ar', '48000', out);
+  await run(FFMPEG, args);
+  return hasMusic;
+}
+
 async function main() {
   const a = parseArgs(process.argv);
   if (!a.episode) {
@@ -171,6 +231,14 @@ async function main() {
     console.log(`[build] ${Object.keys(windows).length} chapters -> out/${a.episode}/chapters.txt`);
   }
 
+  // Resolved before the Short branch, which returns without reaching step 4.
+  const musicFile = a.music
+    ? path.resolve(a.music)
+    : (ep.music?.file ? path.resolve(ROOT, ep.music.file) : null);
+  const hasMusic = musicFile && existsSync(musicFile);
+  if (musicFile && !hasMusic) console.warn(`[build] music not found: ${musicFile} — continuing without it`);
+  const musicGain = a.musicGain ?? ep.music?.gain ?? 0.13;
+
   // A Short is not a crop of the wide video — it is the same chapter RE-RENDERED
   // vertically from the same code. That is only possible because the animation
   // is a program, and it is why these read as native verticals.
@@ -188,13 +256,21 @@ async function main() {
       preset: a.preset ?? 'shorts', out: silent, crf: a.crf,
       from: w.start, to: w.end,
     });
+    const shortDur = w.end - w.start;
     if (existsSync(narrationPath(epDir))) {
-      const seg = path.join(outDir, `short-${a.short}.wav`);
+      // Slice the voice WITHOUT normalising — mixAudio does that once, at the end,
+      // after the bed is under it. Normalising twice would pump the result.
+      const seg = path.join(outDir, `short-${a.short}-voice.wav`);
       await run(FFMPEG, ['-y', '-v', 'error', '-i', narrationPath(epDir),
         '-ss', String(w.start), '-to', String(w.end),
-        '-af', `afade=t=in:st=0:d=0.15,afade=t=out:st=${Math.max(0, w.end - w.start - 0.3).toFixed(2)}:d=0.3,loudnorm=I=-14:TP=-1.5:LRA=11`,
+        '-af', `afade=t=in:st=0:d=0.15,afade=t=out:st=${Math.max(0, shortDur - 0.3).toFixed(2)}:d=0.3`,
         seg]);
-      await run(FFMPEG, ['-y', '-v', 'error', '-i', silent, '-i', seg,
+      const shortMix = path.join(outDir, `short-${a.short}-mix.wav`);
+      const withMusic = await mixAudio({
+        narration: seg, musicFile, gain: musicGain, dur: shortDur, out: shortMix,
+      });
+      console.log(`[build] audio mixed${withMusic ? ' (music ducked under voice)' : ''}`);
+      await run(FFMPEG, ['-y', '-v', 'error', '-i', silent, '-i', shortMix,
         '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', shortOut]);
     } else {
       await run(FFMPEG, ['-y', '-v', 'error', '-i', silent, '-c', 'copy', shortOut]);
@@ -254,62 +330,14 @@ async function main() {
 
   // 4. Audio: narration + ducked music --------------------------------------
   const narration = path.join(epDir, 'narration.wav');
-  const hasNarration = existsSync(narration);
-  const musicFile = a.music
-    ? path.resolve(a.music)
-    : (ep.music?.file ? path.resolve(ROOT, ep.music.file) : null);
-  const hasMusic = musicFile && existsSync(musicFile);
-  if (musicFile && !hasMusic) console.warn(`[build] music not found: ${musicFile} — continuing without it`);
-
   const videoDur = await probeDuration(videoFile);
   const mixFile = path.join(outDir, 'mix.wav');
 
-  if (hasNarration || hasMusic) {
-    const args = ['-y', '-v', 'error'];
-    const filters = [];
-    let narrLabel = null, musicLabel = null, idx = 0;
-
-    if (hasNarration) {
-      args.push('-i', narration);
-      filters.push(`[${idx}:a]aresample=48000,apad,atrim=0:${videoDur},aformat=channel_layouts=stereo[narr]`);
-      narrLabel = 'narr'; idx++;
-    }
-    if (hasMusic) {
-      const gain = a.musicGain ?? ep.music?.gain ?? 0.13;
-      const fadeOut = Math.max(0, videoDur - 2.2);
-      args.push('-stream_loop', '-1', '-i', musicFile);
-      // Carve the speech band OUT of the music rather than only turning it down.
-      // Level alone is not enough: a sustained drone sits right on top of the
-      // voice, and at phrase-ends where the voice trails off they converge.
-      // Notching 500/1600/3000 Hz gives separation by frequency, which survives
-      // the moments where separation by level does not.
-      filters.push(
-        `[${idx}:a]aresample=48000,atrim=0:${videoDur},aformat=channel_layouts=stereo,` +
-        `highpass=f=70,` +
-        `equalizer=f=500:width_type=o:width=1.6:g=-5,` +
-        `equalizer=f=1600:width_type=o:width=1.8:g=-9,` +
-        `equalizer=f=3000:width_type=o:width=1.4:g=-5,` +
-        `volume=${gain},afade=t=in:st=0:d=1.2,afade=t=out:st=${fadeOut.toFixed(2)}:d=2.2[music]`
-      );
-      musicLabel = 'music'; idx++;
-    }
-
-    if (narrLabel && musicLabel) {
-      // Duck the bed under the voice rather than just turning it down.
-      filters.push(`[${narrLabel}]asplit=2[nA][nB]`);
-      // Duck harder and hold longer: the previous settings let the bed back up
-      // between phrases, which is exactly where it was masking words.
-      filters.push(`[${musicLabel}][nB]sidechaincompress=threshold=0.015:ratio=16:attack=8:release=700:makeup=1:detection=rms[duck]`);
-      filters.push(`[nA][duck]amix=inputs=2:normalize=0:dropout_transition=0[pre]`);
-    } else {
-      filters.push(`[${narrLabel ?? musicLabel}]anull[pre]`);
-    }
-    // YouTube normalises to about -14 LUFS; hand it that and it leaves us alone.
-    filters.push(`[pre]loudnorm=I=-14:TP=-1.5:LRA=11[out]`);
-
-    args.push('-filter_complex', filters.join(';'), '-map', '[out]', '-ac', '2', '-ar', '48000', mixFile);
-    await run(FFMPEG, args);
-    console.log(`[build] audio mixed${hasMusic ? ' (music ducked under voice)' : ''}`);
+  const mixed = await mixAudio({
+    narration, musicFile, gain: musicGain, dur: videoDur, out: mixFile,
+  });
+  if (mixed !== null) {
+    console.log(`[build] audio mixed${mixed ? ' (music ducked under voice)' : ''}`);
   }
 
   // 5. Mux -------------------------------------------------------------------

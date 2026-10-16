@@ -6,7 +6,7 @@
  *   npm run shot -- brand 0 --preset=logo
  *   npm run shot -- brand 0 --preset=banner
  */
-import { MB, mbBorder, sunFace, mbVastuGrid, mbBand, mbDisc, fish, mbLotus, ink, chulha } from '../../engine/madhubani.js';
+import { MB, mbBorder, sunFace, mbVastuGrid, mbBand, mbCard, mbDisc, mbFigure, fish, mbLotus, ink, chulha } from '../../engine/madhubani.js';
 import { text } from '../../engine/kit.js';
 
 export default {
@@ -62,13 +62,42 @@ export default {
       }
 
       // thumbnail template
-      stage.add({ id: 'bg', svg: `<rect width="${W}" height="${H}" fill="${MB.ground}"/>`, x: 0, y: 0, layer: 0, boil: false });
-      stage.add({ id: 'border', svg: mbBorder(W, H, { fill: MB.deepRed }), x: 0, y: 0, layer: 50, boil: false });
-      stage.add({ id: 'grid', svg: mbVastuGrid(360, { labels: ['वायव्य','उत्तर','ईशान','पश्चिम','ब्रह्म','पूर्व','नैऋत्य','दक्षिण','आग्नेय'], highlight: 8 }),
-        x: W * 0.28, y: CY, layer: 4, shadow: 'cut-shadow' });
-      stage.add({ id: 'q', svg: text('रसोई\nकिस दिशा में?', { size: 86, font: 'var(--font-deva)', fill: MB.ink }),
-        x: W * 0.68, y: CY - 40, layer: 6 });
-      stage.add({ id: 'chulha', svg: chulha(150), x: W * 0.68, y: CY + 190, layer: 5, shadow: 'cut-shadow' });
+      //
+      // Rebuilt against the packaging data: 89% of breakout thumbnails carry a
+      // face or high contrast, and the v1 cream-on-cream had neither — on a
+      // phone tile it read as a blank beige rectangle. So: saturated ground,
+      // a drawn Madhubani face, a prohibition mark, and text at ~3x the old
+      // size. Five words, which is the breakout median.
+      stage.add({ id: 'bg', svg: `<rect width="${W}" height="${H}" fill="${MB.deepRed}"/>`, x: 0, y: 0, layer: 0, boil: false });
+      stage.add({
+        id: 'bgpat',
+        svg: `<rect width="${W}" height="${H}" fill="${MB.red}" opacity="0.5"/>`,
+        x: 0, y: 0, layer: 1, boil: false,
+      });
+      // a cream panel so the type has something to sit on at phone size
+      stage.add({
+        id: 'panel', svg: mbCard(W * 0.58, H * 0.50, MB.cream, { sw: 7, seed: 'tp' }),
+        x: W * 0.665, y: H * 0.40, layer: 3, shadow: 'cut-shadow',
+      });
+      stage.add({ id: 'border', svg: mbBorder(W, H, { fill: MB.ochre, inset: 14, band: 26 }), x: 0, y: 0, layer: 50, boil: false });
+
+      // the cook at her stove — the face is the single biggest packaging gap
+      // we had, and pairing her with the chulha makes it one picture instead
+      // of two props sharing a frame
+      stage.add({ id: 'cook', svg: mbFigure(1.05, { robe: MB.indigo, robePattern: 'dots' }),
+        x: W * 0.14, y: H * 0.46, layer: 6, shadow: 'cut-shadow' });
+      stage.add({ id: 'chulha', svg: chulha(168), x: W * 0.30, y: H * 0.70, layer: 5, shadow: 'cut-shadow' });
+
+      // the vastu signifier, small and fully inside the frame
+      stage.add({ id: 'grid', svg: mbVastuGrid(188, { labels: ['','','','','','','','','आग्नेय'], highlight: 8, labelSize: 22 }),
+        x: W * 0.87, y: H * 0.79, layer: 7, rot: -5, shadow: 'cut-shadow' });
+
+      stage.add({ id: 'q', svg: text('रसोई\nकिस दिशा में?', { size: 124, font: 'var(--font-deva)', fill: MB.ink, lineHeight: 1.08, weight: 700 }),
+        x: W * 0.665, y: H * 0.33, layer: 8 });
+      stage.add({ id: 'sub', svg: mbBand(W * 0.44, { h: 56, fill: MB.ochre, pattern: 'chevron' }),
+        x: W * 0.665, y: H * 0.565, layer: 8 });
+      stage.add({ id: 'subt', svg: text('ग्रंथ में क्या लिखा है', { size: 44, font: 'var(--font-deva)', fill: MB.ink, weight: 700 }),
+        x: W * 0.665, y: H * 0.565, layer: 9 });
     }});
   },
 };

@@ -40,8 +40,6 @@ export default {
           x: HX, y: HY, layer: 9, scale: 0, shadow: 'cut-shadow',
         });
         Motion.fly(tl, stove, { at: 0.3, dur: 1.0, dir: 'l', dist: 500, arc: 80, spin: 8 });
-        stage.sfx('paper-in', { at: 0.34, gain: 0.5 });
-        stage.sfx('thud', { at: 1.12, gain: 0.45 });
 
         const flame = stage.add({
           id: 'sw-flame',
@@ -69,7 +67,6 @@ export default {
           x: GX, y: GY, layer: 4, opacity: 0, shadow: 'cut-shadow',
         });
         Motion.drawOn(tl, plan, { at: at('s1') + 0.7, dur: 2.2, fade: 0.5 });
-        stage.sfx('ink', { at: at('s1') + 0.75, gain: 0.42 });
         Motion.sway(tl, plan, { amp: 0.8, period: 7, at: at('s1') + 3.2 });
 
         // --- the answer: the kitchen MOVES to where the text puts it -------
@@ -78,7 +75,6 @@ export default {
         const SETTLE = at('s5') + 0.55;
         tl.to(stove, { x: SEX, y: SEY - C * 0.04, scale: C / 330 * 0.92, rot: 0 },
           { at: SETTLE, dur: 1.15, ease: 'inOutCubic' });
-        stage.sfx('paper-out', { at: SETTLE + 0.05, gain: 0.38 });
         tl.to(flame, { x: SEX, y: SEY + C * 0.12, scale: C / 330 * 0.92 },
           { at: SETTLE, dur: 1.15, ease: 'inOutCubic' });
 
@@ -91,9 +87,6 @@ export default {
         });
         tl.fromTo(cell, { opacity: [0, 1], scale: [0.6, 1] },
           { at: SETTLE + 1.0, dur: 0.45, ease: 'outBack' });
-        // the kitchen lands in its corner: the one beat the chapter exists for
-        stage.sfx('impact', { at: SETTLE + 1.02, gain: 0.6 });
-        stage.sfx('chime', { at: SETTLE + 1.14, gain: 0.3 });
         Motion.recoil(tl, [plan], { at: SETTLE + 1.12, amp: 8 });
 
         const tag = stage.add({
@@ -103,7 +96,6 @@ export default {
           x: pick(W * 0.24, CX), y: pick(H * 0.72, H * 0.74), layer: 9, scale: 0, shadow: 'cut-shadow',
         });
         Motion.fly(tl, tag, { at: SETTLE + 1.15, dur: 0.8, dir: 'b', dist: 280, arc: 30, spin: 6 });
-        stage.sfx('paper-in', { at: SETTLE + 1.2, gain: 0.42 });
 
         // --- and there are three more rooms, which is chapter 2 ------------
         const more = ['देवता', 'बर्तन', 'कोष'].map((t, i) => stage.add({
@@ -115,7 +107,6 @@ export default {
         }));
         tl.stagger(more, { scale: [0.5, 1], opacity: [0, 1] },
           { at: at('s7') + 0.5, each: 0.18, dur: 0.5, ease: 'outBack' });
-        more.forEach((_, i) => stage.sfx('tick', { at: at('s7') + 0.52 + i * 0.18, gain: 0.4 }));
 
         fade(stage, { at: 0, dur: 0.6, to: 'in' });
       },

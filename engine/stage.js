@@ -22,7 +22,9 @@ export class Stage {
     this.elements = [];
     this.scenes = [];
     this._defs = [];
-    this.boil = opts.boil ?? { enabled: true, fps: 8, pos: 1.1, rot: 0.22 };
+    this.boil = opts.boil ?? { enabled: false };
+    /** Global animation step in fps. 10 matches the reference; 0 = continuous. */
+    this.step = opts.step ?? 10;
     this.camera = { x: 0, y: 0, zoom: 1, rot: 0 };
     this.tl.track(this.camera);
     this._built = false;
@@ -162,6 +164,15 @@ export class Stage {
 
   /** Position everything for absolute time t and write it to the DOM. */
   seek(t) {
+    // Quantise the WHOLE timeline to one shared clock before anything is
+    // evaluated, so every element advances on the same frame and then holds.
+    //
+    // This is the difference between stepped animation and shaking. The
+    // reference holds 98% of its runs at exactly 2 frames, phase-locked for
+    // up to 16s at a stretch — progressive motion sampled at 10fps on a
+    // single clock. What we had was random per-element displacement with
+    // independent phase, which is what "everything is shaking" actually was.
+    if (this.step) t = Math.floor(t * this.step + 1e-6) / this.step;
     this.tl.seek(t);
 
     const c = this.camera;

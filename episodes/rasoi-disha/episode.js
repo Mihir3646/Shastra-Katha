@@ -25,9 +25,11 @@ export default {
     bg: '#EFE0C0',
     leadIn: 0.8,
     tailOut: 5.8,        // room for the disclaimer card
-    // Was fps 11 / pos 1.5 / rot 0.32, which made the boil the loudest motion in
-    // the file — 72% of all pixel change — and read as shaking rather than paper.
-    boil: { enabled: true, fps: 6, pos: 0.55, rot: 0.1 },
+    // The per-element jitter IS the shaking. Replaced by one global step:
+    // every element advances on the same 10fps clock and then holds, which is
+    // what the reference actually does (98% of its holds are exactly 2 frames).
+    boil: { enabled: false },
+    step: 10,
   },
 
   voice: {

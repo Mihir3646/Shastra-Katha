@@ -10,7 +10,7 @@
  * Everything runs locally. No API keys, no per-minute pricing.
  */
 import { mkdir, writeFile, readFile, access } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { render, run } from './render.mjs';
@@ -135,11 +135,11 @@ async function probeDuration(file) {
  * with no bed sounds bare next to the video it was cut from, so both paths
  * now come through here and get the identical chain.
  */
-async function mixAudio({ narration, musicFile, gain = 0.13, dur, out }) {
+async function mixAudio({ narration, musicFile, gain = 0.13, dur, out, sfx = [], sfxDir = null, sfxOffset = 0 }) {
   const hasNarration = narration && existsSync(narration);
   const hasMusic = musicFile && existsSync(musicFile);
   // null = nothing to mix. A boolean = mixed, and says whether a bed went under.
-  if (!hasNarration && !hasMusic) return null;
+  if (!hasNarration && !hasMusic && !sfx.length) return null;
 
   const args = ['-y', '-v', 'error'];
   const filters = [];
@@ -179,12 +179,42 @@ async function mixAudio({ narration, musicFile, gain = 0.13, dur, out }) {
   } else {
     filters.push(`[${narrLabel ?? musicLabel}]anull[pre]`);
   }
+  // Sound cues, placed against the same timestamps the picture used. Each is
+  // a separate input delayed into position rather than one pre-rendered bed,
+  // so re-timing a line does not mean re-rendering the effects.
+  let last = 'pre';
+  const placed = [];
+  for (const cue of sfx) {
+    if (!sfxDir) break;
+    const file = path.join(sfxDir, `${cue.name}.wav`);
+    if (!existsSync(file)) { console.warn(`[build] sfx not found: ${cue.name}`); continue; }
+    const at = (cue.t ?? 0) - sfxOffset;
+    if (at < -0.2 || at > dur) continue;            // outside this cut
+    const ms = Math.max(0, Math.round(at * 1000));
+    args.push('-i', file);
+    const lbl = `sx${placed.length}`;
+    filters.push(`[${idx}:a]adelay=${ms}|${ms},volume=${(cue.gain ?? 1).toFixed(3)},aformat=channel_layouts=stereo[${lbl}]`);
+    placed.push(lbl);
+    idx++;
+  }
+  if (placed.length) {
+    filters.push(`[${last}][${placed.join('][')}]amix=inputs=${placed.length + 1}:normalize=0:dropout_transition=0[withsfx]`);
+    last = 'withsfx';
+  }
+
   // YouTube normalises to about -14 LUFS; hand it that and it leaves us alone.
-  filters.push(`[pre]loudnorm=I=-14:TP=-1.5:LRA=11[out]`);
+  filters.push(`[${last}]loudnorm=I=-14:TP=-1.5:LRA=11[out]`);
 
   args.push('-filter_complex', filters.join(';'), '-map', '[out]', '-ac', '2', '-ar', '48000', out);
   await run(FFMPEG, args);
-  return hasMusic;
+  return { music: hasMusic, sfx: placed.length };
+}
+
+/** Cues written by the renderer, if this episode produced any. */
+function readSfx(outDir) {
+  const f = path.join(outDir, 'sfx.json');
+  if (!existsSync(f)) return [];
+  try { return JSON.parse(readFileSync(f, 'utf8')); } catch { return []; }
 }
 
 async function main() {
@@ -266,10 +296,11 @@ async function main() {
         '-af', `afade=t=in:st=0:d=0.15,afade=t=out:st=${Math.max(0, shortDur - 0.3).toFixed(2)}:d=0.3`,
         seg]);
       const shortMix = path.join(outDir, `short-${a.short}-mix.wav`);
-      const withMusic = await mixAudio({
+      const r = await mixAudio({
         narration: seg, musicFile, gain: musicGain, dur: shortDur, out: shortMix,
+        sfx: readSfx(outDir), sfxDir: path.join(ROOT, 'assets', 'sfx'), sfxOffset: w.start,
       });
-      console.log(`[build] audio mixed${withMusic ? ' (music ducked under voice)' : ''}`);
+      console.log(`[build] audio mixed${r?.music ? ' (music ducked under voice)' : ''}${r?.sfx ? `, ${r.sfx} cues` : ''}`);
       await run(FFMPEG, ['-y', '-v', 'error', '-i', silent, '-i', shortMix,
         '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', shortOut]);
     } else {
@@ -335,9 +366,10 @@ async function main() {
 
   const mixed = await mixAudio({
     narration, musicFile, gain: musicGain, dur: videoDur, out: mixFile,
+    sfx: readSfx(outDir), sfxDir: path.join(ROOT, 'assets', 'sfx'),
   });
   if (mixed !== null) {
-    console.log(`[build] audio mixed${mixed ? ' (music ducked under voice)' : ''}`);
+    console.log(`[build] audio mixed${mixed.music ? ' (music ducked under voice)' : ''}${mixed.sfx ? `, ${mixed.sfx} cues` : ''}`);
   }
 
   // 5. Mux -------------------------------------------------------------------

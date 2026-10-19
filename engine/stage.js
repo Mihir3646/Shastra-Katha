@@ -32,6 +32,21 @@ export class Stage {
   defs(markup) { this._defs.push(markup); return this; }
 
   /**
+   * Register a sound cue at an absolute time.
+   *
+   * The picture renders silently, so cues are collected here and mixed in a
+   * separate ffmpeg pass against the same timestamps. The reference channels
+   * land roughly one audible hit per second; we had none, which measured as
+   * the single largest reason the result read as inert.
+   *
+   * `name` is a file stem in assets/sfx/.
+   */
+  sfx(name, { at = 0, gain = 1 } = {}) {
+    (this.sfxCues ??= []).push({ t: +(+at).toFixed(3), name, gain });
+    return this;
+  }
+
+  /**
    * Add an element.
    * spec: { id, svg, x, y, rot, scale, scaleX, scaleY, opacity, layer, shadow, boil, clip }
    * Returns the mutable state object that the timeline animates.

@@ -92,7 +92,7 @@ export async function render(opts) {
     const pageUrl = `${srv.url}/engine/stage.html?${qs}`;
     await probe.goto(pageUrl, { waitUntil: 'load' });
     await probe.waitForFunction('window.__ready === true', null, { timeout: 60000 });
-    const info = await probe.evaluate(() => ({ duration: window.__duration, fps: window.__fps, ...window.__size }));
+    const info = await probe.evaluate(() => ({ duration: window.__duration, fps: window.__fps, sfx: window.__sfx ?? [], ...window.__size }));
     await probeBrowser.close();
 
     const fps = info.fps;
@@ -106,6 +106,9 @@ export async function render(opts) {
     const jobs = Math.max(1, a.jobs || Math.min(6, Math.max(1, os.cpus().length - 2)));
     const outDir = path.join(ROOT, 'out', a.episode);
     await mkdir(outDir, { recursive: true });
+    // the picture renders silently; cues have to survive the browser boundary
+    // so the audio pass can place them at the same timestamps
+    await writeFile(path.join(outDir, 'sfx.json'), JSON.stringify(info.sfx ?? [], null, 1));
     const finalOut = a.out ?? path.join(outDir, a.draft ? 'draft.mp4' : 'video.mp4');
 
     console.log(`[render] ${a.episode}  ${width}x${height} @${fps}fps  ${(t1 - t0).toFixed(2)}s  ${total} frames  jobs=${jobs}${a.draft ? '  (draft)' : ''}`);

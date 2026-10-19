@@ -140,6 +140,7 @@ window.__duration = duration;
 window.__fps = preset.fps;
 window.__size = { width: preset.width, height: preset.height };
 window.__seek = t => { stage.seek(t); return t; };
+window.__sfx = (stage.sfxCues ?? []).slice().sort((p, q) => p.t - q.t);
 window.__ready = true;
 
 stage.seek(0);

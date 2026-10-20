@@ -16,7 +16,7 @@ export default {
     { id: 'n5', text: 'और अगर आपकी रसोई वहाँ नहीं है?', gap: 0.9 },
     { id: 'n6', text: 'यहाँ हम सीधी बात कहेंगे। इस अध्याय में उसका कोई उपाय नहीं लिखा।', gap: 0.3 },
     { id: 'n7', text: 'जो उपाय बताए जाते हैं, वे परंपरा से आते हैं — इस श्लोक से नहीं।', gap: 0.15 },
-    { id: 'n8', text: 'दोनों का अपना स्थान है। पर दोनों एक नहीं हैं।', gap: 0.3 },
+    { id: 'n8', text: 'आप जो भी चुनें, यह जानकर चुनिए।', gap: 0.3 },
     { id: 'n9', text: 'हम वही कहेंगे जितना ग्रंथ कहता है। आगे का निर्णय आपका।', gap: 0.3 },
     { id: 'n10', text: 'मयमतम् या मानसार हो, तो तैंतालीसवाँ श्लोक मिलाकर कमेंट में बताइए।', gap: 0.3 },
     { id: 'n11', text: 'अगली बार, इसी अध्याय में — जल का स्थान।', gap: 0.3 },
@@ -112,7 +112,7 @@ export default {
         const rule = stage.add({
           id: 'n-rule',
           svg: mbCard(pick(700, 880), pick(118, 136), MB.deepRed, { pattern: 'hatch', sw: 5, seed: 'nr' })
-             + text('शास्त्र, पूरे सम्मान के साथ', { size: pick(36, 46), font: 'var(--font-deva)', fill: MB.cream }),
+             + text('जितना ग्रंथ कहता है', { size: pick(36, 46), font: 'var(--font-deva)', fill: MB.cream }),
           x: pick(W * 0.72, CX), y: pick(H * 0.44, H * 0.58), layer: 10, scale: 0, shadow: 'cut-shadow',
         });
         Motion.place(tl, rule, { at: at('n11') + 0.3 });

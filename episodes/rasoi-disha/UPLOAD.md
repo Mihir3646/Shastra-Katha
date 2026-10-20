@@ -2,7 +2,7 @@
 
 Rebuilt. v1 answered its title at 1:20 and spent 28% of its runtime on
 methodology; this one answers at 0:21 and ends with what the text prescribes
-for each room. 3m22s, 48 lines.
+for each room. 3m19s, 48 lines.
 
 ---
 
@@ -97,7 +97,7 @@ shastra katha
 
 | Field | Value |
 |---|---|
-| File | `out/rasoi-disha/rasoi-disha.mp4` — 79 MB, 1920x1080, 3m22s, -14.2 LUFS |
+| File | `out/rasoi-disha/rasoi-disha.mp4` — 78 MB, 1920x1080, 3m19s, -14.1 LUFS |
 | Thumbnail | `channel-setup/3-thumbnail-episode1.png` |
 | Subtitles | `out/rasoi-disha/rasoi-disha.srt` (Hindi) |
 | Visibility | Public, or Unlisted while the artwork rights are open |

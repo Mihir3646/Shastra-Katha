@@ -52,7 +52,7 @@ export default {
         const vidya = stage.add({
           id: 'g-vidya',
           svg: mbCard(pick(520, 640), pick(110, 126), MB.deepRed, { pattern: 'hatch', sw: 5, seed: 'vd' })
-             + text('वास्तुविद्या', { size: pick(52, 62), font: 'var(--font-deva)', fill: MB.cream }),
+             + text('१५०० साल पुराना', { size: pick(52, 62), font: 'var(--font-deva)', fill: MB.cream }),
           x: pick(W * 0.72, CX), y: pick(H * 0.28, H * 0.8), layer: 8, scale: 0, shadow: 'cut-shadow',
         });
         Motion.place(tl, vidya, { at: at('g6') + 1.6 });

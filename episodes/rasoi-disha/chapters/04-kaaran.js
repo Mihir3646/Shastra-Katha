@@ -8,12 +8,12 @@ export default {
   title: 'कारण और शास्त्र की गहराई',
   short: true,
   script: [
-    { id: 'k1', text: 'अब देखिए, यह शास्त्र कितना विस्तृत है।', gap: 0.3 },
-    { id: 'k2', text: 'इक्यासी खानों में से हर एक का अपना देवता है।', gap: 0.15 },
-    { id: 'k3', text: 'ग्रंथ उन्हें गिनाता भी है। पूरब की पहली पंक्ति के आठ नाम —', gap: 0.15 },
+    { id: 'k1', text: 'और ग्रंथ उन्हें नाम देकर गिनाता भी है।', gap: 0.3 },
+    { id: 'k2', text: 'देखिए यह शास्त्र कितना विस्तृत है।', gap: 0.15 },
+    { id: 'k3', text: 'पूरब की पहली पंक्ति के आठ खाने लीजिए। उनके देवता —', gap: 0.15 },
     { id: 'k4', text: 'अग्नि, पर्जन्य, जयंत, इंद्र, सूर्य, सत्या, भृश, अंतरिक्ष।', gap: 0.9 },
     { id: 'k5', text: 'आठ खाने, आठ नाम। अध्याय तिरपन, श्लोक तैंतालीस।', gap: 0.3 },
-    { id: 'k6', text: 'बत्तीस देवता बाहर के खानों में, तेरह भीतर।', gap: 0.3 },
+    { id: 'k6', text: 'यही गिनती चारों दिशाओं में आगे चलती है।', gap: 0.3 },
     { id: 'k7', text: 'यानी रसोई का नियम अकेला नियम नहीं है।', gap: 0.15 },
     { id: 'k8', text: 'वह एक पूरी व्यवस्था का हिस्सा है।', gap: 0.3 },
     { id: 'k9', text: 'और परंपरा इस दिशा को अग्नि से जोड़ती है — इसीलिए आग्नेय।', gap: 0.15 },
@@ -73,7 +73,7 @@ export default {
         }
 
         // three possible explanations, arriving one per line
-        ['इक्यासी खाने', 'बत्तीस बाहर', 'तेरह भीतर'].forEach((t, i) => {
+        ['आठ खाने', 'आठ देवता', 'चारों दिशाओं में'].forEach((t, i) => {
           const el = stage.add({
             id: `k-maybe${i}`,
             svg: mbCard(pick(400, 500), pick(74, 84), MB.cream, { sw: 4.5, seed: 'mb' + i })
@@ -81,7 +81,7 @@ export default {
             x: pick(W * 0.74, CX), y: pick(H * (0.52 + i * 0.1), H * (0.59 + i * 0.072)), layer: 9, scale: 0, shadow: 'cut-shadow-sm',
           });
           tl.fromTo(el, { scale: [0.55, 1], opacity: [0, 1], rot: [i % 2 ? 3 : -3, i % 2 ? 1 : -1] },
-            { at: at(['k2', 'k6', 'k6'][i]) + [0.6, 0.5, 2.0][i], dur: 0.42, ease: 'outBack' });
+            { at: at(['k5', 'k5', 'k6'][i]) + [0.5, 2.0, 0.6][i], dur: 0.42, ease: 'outBack' });
           // clear the options as the conclusion lands, so it owns the column
           tl.to(el, { opacity: 0, scale: 0.92 }, { at: at('k10') + 1.0, dur: 0.4 });
         });

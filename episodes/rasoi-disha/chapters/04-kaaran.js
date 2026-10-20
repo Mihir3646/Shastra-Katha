@@ -29,8 +29,6 @@ export default {
       build() {
         stage.add({ id: 'k-bg', svg: `<rect width="${W}" height="${H}" fill="#E3D2B8"/>`, x: 0, y: 0, layer: 0, boil: false });
         stage.add({ id: 'k-border', svg: mbBorder(W, H, { fill: MB.brown, pattern: 'cross' }), x: 0, y: 0, layer: 60, boil: false });
-        tl.fromTo(stage.camera, { zoom: [1.0, 1.06] },
-          { at: from, dur: (end('k11') + 0.4) - from, ease: 'inOutSine' });
 
         const gs = pick(Math.min(W * 0.34, 440), Math.min(W * 0.52, 520));
         const c = gs / 3;
@@ -42,7 +40,7 @@ export default {
           id: 'k-grid', svg: mbVastuGrid(gs, { labels }),
           x: gx, y: gy, layer: 4, opacity: 0, shadow: 'cut-shadow',
         });
-        tl.fromTo(grid, { opacity: [0, 1], scale: [0.93, 1] }, { at: from, dur: 0.45, ease: 'outBack' });
+        Motion.drawOn(tl, grid, { at: at('k1') - 0.3, dur: 1.8, fade: 0.45 });
         Motion.sway(tl, grid, { amp: 1, period: 6, at: from + 1 });
 
         // what everyone says: Agni in the south-east
@@ -52,7 +50,7 @@ export default {
              + text('अग्नि', { size: c * 0.2, font: 'var(--font-deva)', fill: MB.cream }),
           x: gx + c, y: gy + c, layer: 6, scale: 0, shadow: 'cut-shadow-sm',
         });
-        tl.fromTo(claim, { scale: [1.8, 1], opacity: [0, 1] }, { at: at('k9') + 1.8, dur: 0.4, ease: 'outBack' });
+        Motion.place(tl, claim, { at: at('k9') + 1.8 });
 
         const said = stage.add({
           id: 'k-said',
@@ -60,7 +58,7 @@ export default {
              + text('परंपरा का तर्क', { size: pick(34, 42), font: 'var(--font-deva)', fill: MB.inkSoft }),
           x: pick(W * 0.74, CX), y: pick(H * 0.24, H * 0.625), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
         });
-        tl.fromTo(said, { scale: [0.6, 1], opacity: [0, 1], rot: [-3, -1] }, { at: at('k9') + 1.4, dur: 0.4, ease: 'outBack' });
+        Motion.place(tl, said, { at: at('k9') + 1.4 });
 
         const verse = stage.add({
           id: 'k-verse',
@@ -68,7 +66,7 @@ export default {
              + text('श्लोक ४३', { size: pick(36, 44), font: 'var(--font-deva)', fill: MB.ink }),
           x: pick(W * 0.74, CX), y: pick(H * 0.36, H * 0.725), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
         });
-        tl.fromTo(verse, { scale: [0.6, 1], opacity: [0, 1], rot: [3, 1] }, { at: at('k5') + 1.8, dur: 0.45, ease: 'outBack' });
+        Motion.place(tl, verse, { at: at('k5') + 1.8 });
 
         for (const el of [said, verse]) {
           tl.to(el, { opacity: 0, scale: 0.94 }, { at: at('k9') - 0.3, dur: 0.4 });
@@ -95,8 +93,7 @@ export default {
              + text('ग्रंथ और परंपरा, दोनों', { size: pick(38, 46), font: 'var(--font-deva)', fill: MB.cream }),
           x: pick(W * 0.7, CX), y: pick(H * 0.64, H * 0.72), layer: 10, scale: 0, shadow: 'cut-shadow',
         });
-        tl.fromTo(honest, { scale: [0.5, 1], opacity: [0, 1], rot: [-4, -1.5] },
-          { at: at('k10') + 1.4, dur: 0.55, ease: 'outBack' });
+        Motion.place(tl, honest, { at: at('k10') + 1.4 });
         Motion.sway(tl, honest, { amp: 0.9, period: 4, at: at('k10') + 2 });
       },
     });

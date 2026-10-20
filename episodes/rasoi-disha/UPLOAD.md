@@ -1,29 +1,27 @@
 # Episode 1 — upload pack
 
-Paste-ready. Everything below is the Hindi copy that goes into YouTube Studio.
+Rebuilt. v1 answered its title at 1:20 and spent 28% of its runtime on
+methodology; this one answers at 0:21 and ends with what the text prescribes
+for each room. 3m22s, 48 lines.
 
 ---
 
 ## Title
 
-**Primary** (84 chars — question form, names the source, promises no outcome):
+**Primary** — carries a numeral, which 35% of million-view titles in this niche do:
 
 ```
-रसोई किस दिशा में? बृहत् संहिता ५३.११८ में क्या लिखा है
+रसोई किस दिशा में? बृहत् संहिता के 4 कमरे, 1 श्लोक में
 ```
 
 Alternates:
 
 ```
-रसोई किस दिशा में होनी चाहिए? — ग्रंथ से सीधा उत्तर
+वास्तु के 4 कमरे: ग्रंथ में किस दिशा में लिखे हैं
 ```
 ```
-रसोई की दिशा: बृहत् संहिता क्या कहती है, और क्या नहीं
+रसोई दक्षिण-पूर्व में क्यों? बृहत् संहिता 53.118 पढ़िए
 ```
-
-Why question form: among the top performers in this niche, question titles were
-the most common pattern (22% of them, 1.07M median views). It also happens to be
-what this episode actually is.
 
 ---
 
@@ -32,25 +30,30 @@ what this episode actually is.
 ```
 हर घर में यह सवाल उठता है — रसोई किस दिशा में होनी चाहिए?
 
-इस वीडियो में हम जवाब किसी परंपरा या सुनी-सुनाई बात से नहीं, सीधे ग्रंथ से
-पढ़ते हैं। वराहमिहिर की बृहत् संहिता, अध्याय ५३, श्लोक ११८ — जहाँ रसोई का
-स्थान स्पष्ट रूप से दक्षिण-पूर्व (आग्नेय) बताया गया है।
+इसका उत्तर बृहत् संहिता में एक ही पंक्ति में मिलता है। अध्याय तिरपन,
+श्लोक एक सौ अठारह। और वह सिर्फ़ रसोई की बात नहीं करता — वह चार कमरे
+एक साथ बताता है।
 
-और जहाँ ग्रंथ चुप है, वहाँ हम भी चुप हैं। आग्नेय कोण का जो कारण आमतौर पर
-बताया जाता है, वह इसी अनुवाद के श्लोक ४३ से पूरी तरह मेल नहीं खाता। हमने यह
-बात छिपाई नहीं — वीडियो में साफ़ कहा है कि यह आगे पढ़ना बाकी है।
+देवताओं का स्थान — उत्तर-पूर्व।
+रसोई — दक्षिण-पूर्व।
+बर्तन और घर का सामान — दक्षिण-पश्चिम।
+कोष और अनाज — उत्तर-पश्चिम।
 
-शास्त्र जितना कहता है, उतना ही कहेंगे — पूरे सम्मान के साथ, और पूरी सावधानी से।
+इस वीडियो में हम यही चारों पढ़ते हैं, और यह भी देखते हैं कि इक्यासी
+खानों का वह पूरा नक़्शा कैसे बनता है जिसका रसोई एक हिस्सा है।
+
+जो ग्रंथ में लिखा है, वह हम बताएँगे। जो परंपरा से आता है, उसे परंपरा
+कहेंगे। दोनों का अपना स्थान है।
 
 ━━━━━━━━━━━━━━━━━━━━
 
 ⏱ अध्याय
 
 0:00 सवाल
-0:37 ग्रंथ
-1:38 वास्तुपुरुष
-2:33 कारण और शास्त्र की गहराई
-3:37 निश्चित और अनिश्चित
+0:33 ग्रंथ
+1:03 वास्तुपुरुष
+1:43 कारण और शास्त्र की गहराई
+2:27 निश्चित और अनिश्चित
 
 ━━━━━━━━━━━━━━━━━━━━
 
@@ -60,15 +63,14 @@ what this episode actually is.
 अनुवाद: N. Chidambaram Iyer, 1884 — पूरा पाठ निःशुल्क उपलब्ध है:
 https://www.wisdomlib.org/hinduism/book/brihat-samhita/d/doc229297.html
 
-आप स्वयं पढ़कर जाँच सकते हैं। यही इस चैनल का तरीक़ा है।
+अध्याय 53, श्लोक 118 — आप स्वयं पढ़कर मिला सकते हैं।
 
 ━━━━━━━━━━━━━━━━━━━━
 
 ⚠ सूचना
 
-यह वीडियो पारंपरिक ग्रंथों की जानकारी देता है। यह किसी परिणाम, लाभ या
-उपाय की गारंटी नहीं है, और न ही यह चिकित्सा, वित्तीय या क़ानूनी सलाह है।
-किसी भी निर्णय से पहले योग्य व्यक्ति से परामर्श करें।
+यह वीडियो पारंपरिक ग्रंथों की जानकारी देता है। यह किसी परिणाम या लाभ
+की गारंटी नहीं है, और न ही यह चिकित्सा, वित्तीय या क़ानूनी सलाह है।
 
 ━━━━━━━━━━━━━━━━━━━━
 
@@ -84,9 +86,9 @@ https://www.wisdomlib.org/hinduism/book/brihat-samhita/d/doc229297.html
 
 ```
 वास्तु शास्त्र, बृहत् संहिता, वास्तु टिप्स, रसोई की दिशा, रसोई वास्तु, आग्नेय कोण,
-वास्तु पुरुष, वराहमिहिर, हिंदू शास्त्र, सनातन धर्म, vastu shastra, brihat samhita,
-kitchen direction vastu, vastu purusha, agneya corner, varahamihira, hindu scriptures,
-vastu in hindi, shastra katha
+चार कमरे वास्तु, वास्तु पुरुष, वराहमिहिर, हिंदू शास्त्र, सनातन धर्म, vastu shastra,
+brihat samhita, kitchen direction vastu, vastu purusha, varahamihira, vastu in hindi,
+shastra katha
 ```
 
 ---
@@ -95,25 +97,30 @@ vastu in hindi, shastra katha
 
 | Field | Value |
 |---|---|
-| Visibility | Public |
-| Category | Education |
-| Language | Hindi |
-| Subtitles | upload `out/rasoi-disha/rasoi-disha.srt` (Hindi) |
-| Thumbnail | `channel-setup/3-thumbnail-template-1280x720.png` |
+| File | `out/rasoi-disha/rasoi-disha.mp4` — 79 MB, 1920x1080, 3m22s, -14.2 LUFS |
+| Thumbnail | `channel-setup/3-thumbnail-episode1.png` |
+| Subtitles | `out/rasoi-disha/rasoi-disha.srt` (Hindi) |
+| Visibility | Public, or Unlisted while the artwork rights are open |
+| Category | Education · Language Hindi |
 | Made for kids | **No** |
-| Altered content | No |
-| Comments | On — this channel invites correction |
+| End screen / cards | leave empty — nothing to link to yet, and the tail is occupied |
 | Playlist | वास्तु शास्त्र |
-
-File to upload: `out/rasoi-disha/rasoi-disha.mp4` (202 MB, 1920x1080, 4m42s)
 
 ---
 
 ## Pinned comment
 
 ```
-इस वीडियो का पूरा आधार एक ही श्लोक है — बृहत् संहिता ५३.११८।
-अनुवाद (Iyer, 1884) निःशुल्क है, लिंक विवरण में है। ख़ुद पढ़िए।
+इस वीडियो का आधार एक ही श्लोक है — बृहत् संहिता ५३.११८।
+अनुवाद निःशुल्क है, लिंक विवरण में है। ख़ुद पढ़िए।
 
-अगर कहीं हमसे चूक हुई हो, तो टोकिए — संदर्भ के साथ। सुधार कर लेंगे।
+कहीं चूक लगे तो संदर्भ के साथ बताइए — सुधार कर लेंगे।
 ```
+
+---
+
+## Open before a monetised upload
+
+`assets/art/vastu-purusha.png` (chapter 3, ~40s on screen) has no established
+provenance. See `assets/art/README.md`. Unlisted is the safe option until that
+is settled; `engine/vastupurusha.js` is the procedural fallback.

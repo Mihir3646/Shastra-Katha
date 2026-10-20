@@ -23,8 +23,6 @@ export default {
       name: 'sawaal', from: 0, to: end('s7') + 0.4,
       build() {
         stage.add({ id: 'sw-border', svg: mbBorder(W, H), x: 0, y: 0, layer: 60, boil: false });
-        tl.fromTo(stage.camera, { zoom: [1.0, 1.10] },
-          { at: 0, dur: end('s7') + 0.4, ease: 'inOutSine' });
 
         // --- layout ------------------------------------------------------
         const GS = pick(Math.min(W * 0.34, 440), Math.min(W * 0.62, 600));

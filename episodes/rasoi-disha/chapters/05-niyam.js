@@ -31,14 +31,12 @@ export default {
       build() {
         stage.add({ id: 'n-bg', svg: `<rect width="${W}" height="${H}" fill="#F0E4C4"/>`, x: 0, y: 0, layer: 0, boil: false });
         stage.add({ id: 'n-border', svg: mbBorder(W, H, { fill: MB.green, pattern: 'leafrow' }), x: 0, y: 0, layer: 60, boil: false });
-        tl.fromTo(stage.camera, { zoom: [1.0, 1.05], y: [0, 10] },
-          { at: from, dur: (end('n12') + 1.2) - from, ease: 'inOutSine' });
 
         const sun = stage.add({
           id: 'n-sun', svg: sunFace(pick(48, 60), { face: 'none' }),
           x: pick(W * 0.14, CX - W * 0.34), y: pick(H * 0.16, H * 0.15), layer: 5, scale: 0,
         });
-        tl.fromTo(sun, { scale: [0, 1] }, { at: from, dur: 0.45, ease: 'outBack' });
+        Motion.place(tl, sun, { at: from });
         Motion.spin(tl, sun, { rpm: 0.35, at: from + 0.6 });
 
         const gs = pick(Math.min(W * 0.3, 390), Math.min(W * 0.58, 560));
@@ -50,7 +48,7 @@ export default {
           svg: mbVastuGrid(gs, { labels: ['वायव्य','उत्तर','ईशान','पश्चिम','ब्रह्म','पूर्व','नैऋत्य','दक्षिण','आग्नेय'] }),
           x: gx, y: gy, layer: 4, opacity: 0, shadow: 'cut-shadow',
         });
-        tl.fromTo(grid, { opacity: [0, 1], scale: [0.93, 1] }, { at: from, dur: 0.45, ease: 'outBack' });
+        Motion.drawOn(tl, grid, { at: at('n2') - 0.3, dur: 1.8, fade: 0.45 });
         Motion.sway(tl, grid, { amp: 1, period: 6, at: from + 1 });
 
         // CERTAIN — the kitchen, stamped with a tick
@@ -60,7 +58,7 @@ export default {
              + text('✓', { size: c * 0.34, fill: MB.cream, weight: 700 }),
           x: gx + c, y: gy + c, layer: 6, scale: 0, shadow: 'cut-shadow-sm',
         });
-        tl.fromTo(sure, { scale: [2, 1], opacity: [0, 1], rot: [-6, 0] }, { at: at('n2') + 1.5, dur: 0.42, ease: 'outBack' });
+        Motion.place(tl, sure, { at: at('n2') + 1.5 });
         tl.drive(sure, (l, g, s) => { s.scale = 1 + Math.sin(g * 2.8) * 0.028; }, { at: at('n2') + 2.1 });
 
         const cite = stage.add({
@@ -69,7 +67,7 @@ export default {
              + text('बृहत् संहिता ५३.११८', { size: pick(34, 42), font: 'var(--font-deva)', fill: MB.ink }),
           x: pick(W * 0.74, CX), y: pick(H * 0.24, H * 0.72), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
         });
-        tl.fromTo(cite, { scale: [0.6, 1], opacity: [0, 1], rot: [-2, -1] }, { at: at('n3') + 0.4, dur: 0.45, ease: 'outBack' });
+        Motion.place(tl, cite, { at: at('n3') + 0.4 });
 
         // UNCERTAIN — the reason
         const unsure = stage.add({
@@ -78,7 +76,7 @@ export default {
              + text('अपने नक़्शे पर मिलाइए', { size: pick(34, 42), font: 'var(--font-deva)', fill: MB.ink }),
           x: pick(W * 0.74, CX), y: pick(H * 0.38, H * 0.8), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
         });
-        tl.fromTo(unsure, { scale: [0.6, 1], opacity: [0, 1], rot: [3, 1] }, { at: at('n4') + 0.8, dur: 0.45, ease: 'outBack' });
+        Motion.place(tl, unsure, { at: at('n4') + 0.8 });
 
         // NOT IN THE TEXT — the inference people mistake for scripture
         const notText = stage.add({
@@ -87,7 +85,7 @@ export default {
              + text('उपाय परंपरा से', { size: pick(34, 42), font: 'var(--font-deva)', fill: MB.cream }),
           x: pick(W * 0.74, CX), y: pick(H * 0.52, H * 0.88), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
         });
-        tl.fromTo(notText, { scale: [0.6, 1], opacity: [0, 1], rot: [-3, -1] }, { at: at('n7') + 0.4, dur: 0.45, ease: 'outBack' });
+        Motion.place(tl, notText, { at: at('n7') + 0.4 });
 
         // hand the right column over to the closing statement
         for (const el of [cite, unsure, notText]) {
@@ -101,13 +99,13 @@ export default {
              + text('देवता', { size: c * 0.18, font: 'var(--font-deva)', fill: MB.ink }),
           x: gx + c, y: gy - c, layer: 6, scale: 0, shadow: 'cut-shadow-sm',
         });
-        tl.fromTo(shrine, { scale: [1.8, 1], opacity: [0, 1] }, { at: at('n8') + 0.6, dur: 0.42, ease: 'outBack' });
+        Motion.place(tl, shrine, { at: at('n8') + 0.6 });
 
         const lotus = stage.add({
           id: 'n-lotus', svg: mbLotus(pick(46, 56)),
           x: gx + c, y: gy - c - c * 0.34, layer: 8, scale: 0, shadow: 'cut-shadow-sm',
         });
-        tl.fromTo(lotus, { scale: [0, 1], rot: [-40, 0] }, { at: at('n9') + 0.6, dur: 0.45, ease: 'outBack' });
+        Motion.place(tl, lotus, { at: at('n9') + 0.6 });
         Motion.spin(tl, lotus, { rpm: 0.3, at: at('n9') + 1.1 });
 
         // the closing promise
@@ -117,8 +115,7 @@ export default {
              + text('शास्त्र, पूरे सम्मान के साथ', { size: pick(36, 46), font: 'var(--font-deva)', fill: MB.cream }),
           x: pick(W * 0.72, CX), y: pick(H * 0.44, H * 0.58), layer: 10, scale: 0, shadow: 'cut-shadow',
         });
-        tl.fromTo(rule, { scale: [0.5, 1], opacity: [0, 1], rot: [-3, -1] },
-          { at: at('n11') + 0.3, dur: 0.55, ease: 'outBack' });
+        Motion.place(tl, rule, { at: at('n11') + 0.3 });
         Motion.sway(tl, rule, { amp: 0.9, period: 4, at: at('n11') + 1 });
 
         const sub = stage.add({
@@ -126,8 +123,10 @@ export default {
           svg: text('बने रहिए', { size: pick(48, 58), font: 'var(--font-deva)', fill: MB.deepRed }),
           x: pick(W * 0.72, CX), y: pick(H * 0.58, H * 0.68), layer: 10, opacity: 0,
         });
-        tl.fromTo(sub, { opacity: [0, 1], y: [pick(H * 0.61, H * 0.71), pick(H * 0.58, H * 0.68)] },
-          { at: at('n12') + 1.2, dur: 0.5, ease: 'outCubic' });
+        // Deriving from the element's authored y. Hardcoding coordinates in
+        // the tween silently overrides wherever the element was placed — which
+        // is how this one kept reappearing inside the caption band.
+        Motion.place(tl, sub, { at: at('n12') + 1.2 });
 
         fade(stage, { at: end('n12') + 0.75, dur: 0.5, to: 'out' });
         addDisclaimer(stage, { at: end('n12') + 1.25, hold: 3.8 });

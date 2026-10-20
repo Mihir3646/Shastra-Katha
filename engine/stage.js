@@ -235,6 +235,27 @@ function isTypeOnly(svg) {
 
 export const Motion = {
   /**
+   * The ordinary entrance, measured off the reference.
+   *
+   * 400ms, opacity-led, with a small positional offset and — importantly —
+   * NO scale change: their bounding box is 0.97-1.00x of final from the first
+   * visible frame. No pop, no overshoot, no spring. Scale-popping every card
+   * is what makes a board look like a slide deck.
+   */
+  place(tl, el, { at = 0, dur = 0.4, dy = 40, dx = 0, ease = 'outCubic' } = {}) {
+    // Elements are conventionally authored at scale: 0 so they start hidden.
+    // Without restoring it they slide into position and are never seen — the
+    // same trap Motion.fly fell into.
+    const s1 = el.scale || 1;
+    tl.fromTo(el, {
+      opacity: [0, el.opacity || 1],
+      x: [el.x + dx, el.x], y: [el.y + dy, el.y],
+      scale: [s1, s1],
+    }, { at, dur, ease });
+    return tl;
+  },
+
+  /**
    * Arrives from off-frame on a bowed path and settles.
    *
    * The arc is free: x and y run on different curves, so the path bows instead
@@ -254,7 +275,7 @@ export const Motion = {
     tl.fromTo(el, { x: [x0 + dx, x0], scale: [s1 * 0.86, s1], opacity: [0, el.opacity || 1] },
       { at, dur, ease });
     tl.fromTo(el, { y: [y0 + dy - arc, y0] }, { at, dur, ease: 'outBack' });
-    tl.fromTo(el, { rot: [r0 + spin, r0] }, { at, dur: dur * 1.35, ease: 'outElastic' });
+    tl.fromTo(el, { rot: [r0 + spin, r0] }, { at, dur: dur * 1.2, ease: 'outCubic' });
     return tl;
   },
 

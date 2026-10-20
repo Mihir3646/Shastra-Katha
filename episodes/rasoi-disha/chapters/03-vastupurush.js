@@ -29,8 +29,6 @@ export default {
       build() {
         stage.add({ id: 'v-bg', svg: `<rect width="${W}" height="${H}" fill="#DCC9A4"/>`, x: 0, y: 0, layer: 0, boil: false });
         stage.add({ id: 'v-border', svg: mbBorder(W, H, { fill: MB.plum ?? MB.indigo, pattern: 'net' }), x: 0, y: 0, layer: 60, boil: false });
-        tl.fromTo(stage.camera, { zoom: [1.0, 1.07], y: [0, 14] },
-          { at: from, dur: (end('v10') + 0.4) - from, ease: 'inOutSine' });
 
         const gs = pick(Math.min(W * 0.32, 420), Math.min(W * 0.64, 620));
         const gy = pick(H * 0.48, H * 0.44);
@@ -44,7 +42,7 @@ export default {
              + text('श्लोक\n२', { size: pick(66, 78), font: 'var(--font-deva)', fill: MB.ink, lineHeight: 1.2 }),
           x: gx, y: gy, layer: 5, scale: 0, shadow: 'cut-shadow',
         });
-        tl.fromTo(verse, { scale: [0.4, 1], opacity: [0, 1], rot: [-6, -2] }, { at: from, dur: 0.55, ease: 'outBack' });
+        Motion.place(tl, verse, { at: from });
         Motion.sway(tl, verse, { amp: 1.2, period: 5, at: from + 0.9 });
         tl.to(verse, { opacity: 0, scale: 0.8 }, { at: at('v3') - 0.15, dur: 0.35, ease: 'inCubic' });
 
@@ -54,7 +52,7 @@ export default {
              + text('एक कथा', { size: pick(38, 46), font: 'var(--font-deva)', fill: MB.ink }),
           x: pick(W * 0.75, CX), y: pick(H * 0.3, H * 0.72), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
         });
-        tl.fromTo(katha, { scale: [0.5, 1], opacity: [0, 1], rot: [4, 1.5] }, { at: at('v2') + 0.2, dur: 0.42, ease: 'outBack' });
+        Motion.place(tl, katha, { at: at('v2') + 0.2 });
         tl.to(katha, { opacity: 0 }, { at: at('v6') - 0.2, dur: 0.4 });
 
         // A commissioned illustration, not generated: it already carries the
@@ -64,8 +62,7 @@ export default {
           id: 'v-purush', svg: artwork('vastu-purusha.png', pick(gs * 1.72, gs * 1.30)),
           x: gx, y: gy, layer: 5, scale: 0, opacity: 0, shadow: 'cut-shadow',
         });
-        tl.fromTo(purush, { scale: [1.35, 1], opacity: [0, 1] },
-          { at: at('v3') + 0.2, dur: 0.9, ease: 'outCubic' });
+        Motion.place(tl, purush, { at: at('v3') + 0.2 });
         Motion.sway(tl, purush, { amp: 0.45, period: 7, at: at('v3') + 1.6 });
         // a slow push into the artwork while the story is told
         tl.to(purush, { scale: 1.1 }, { at: at('v5'), dur: 6, ease: 'inOutSine' });
@@ -76,7 +73,7 @@ export default {
              + text('वास्तुपुरुष', { size: pick(42, 52), font: 'var(--font-deva)', fill: MB.cream }),
           x: pick(W * 0.75, CX), y: pick(H * 0.3, H * 0.72), layer: 9, scale: 0, shadow: 'cut-shadow',
         });
-        tl.fromTo(name, { scale: [0.5, 1], opacity: [0, 1], rot: [-4, -1.5] }, { at: at('v6') + 0.7, dur: 0.5, ease: 'outBack' });
+        Motion.place(tl, name, { at: at('v6') + 0.7 });
         Motion.sway(tl, name, { amp: 0.9, period: 4.4, at: at('v6') + 1.3 });
 
         const count = stage.add({
@@ -85,7 +82,7 @@ export default {
              + text('८१', { size: pick(62, 76), font: 'var(--font-deva)', fill: MB.ink }),
           x: pick(W * 0.75, CX - W * 0.32), y: pick(H * 0.48, H * 0.14), layer: 9, scale: 0, shadow: 'cut-shadow',
         });
-        tl.fromTo(count, { scale: [1.8, 1], opacity: [0, 1], rot: [-8, -2] }, { at: at('v9') + 1.6, dur: 0.5, ease: 'outBack' });
+        Motion.place(tl, count, { at: at('v9') + 1.6 });
 
         const band = stage.add({
           id: 'v-band', svg: mbBand(pick(380, 500), { h: 18, fill: MB.ochre, pattern: 'chevron' }),

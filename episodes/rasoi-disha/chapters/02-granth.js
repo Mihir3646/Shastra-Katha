@@ -26,8 +26,6 @@ export default {
       build() {
         stage.add({ id: 'g-bg', svg: `<rect width="${W}" height="${H}" fill="#E7D3B4"/>`, x: 0, y: 0, layer: 0, boil: false });
         stage.add({ id: 'g-border', svg: mbBorder(W, H, { fill: MB.indigo }), x: 0, y: 0, layer: 60, boil: false });
-        tl.fromTo(stage.camera, { zoom: [1.0, 1.06], y: [0, -12] },
-          { at: from, dur: (end('g8') + 0.4) - from, ease: 'inOutSine' });
 
         // the book itself
         const book = stage.add({
@@ -36,7 +34,7 @@ export default {
              + text('बृहत्\nसंहिता', { size: pick(60, 72), font: 'var(--font-deva)', fill: MB.ink, lineHeight: 1.25 }),
           x: pick(W * 0.24, CX), y: pick(H * 0.3, H * 0.33), layer: 6, scale: 0, shadow: 'cut-shadow',
         });
-        tl.fromTo(book, { scale: [0.4, 1], opacity: [0, 1], rot: [-7, -2] }, { at: from + 0.1, dur: 0.6, ease: 'outBack' });
+        Motion.place(tl, book, { at: from + 0.1 });
         Motion.sway(tl, book, { amp: 1.1, period: 5, at: from + 1 });
 
         // author and date, arriving as they are spoken
@@ -47,8 +45,7 @@ export default {
                + text(label, { size: pick(34, 42), font: 'var(--font-deva)', fill: MB.cream }),
             x: pick(W * 0.24, CX), y: pick(H * (0.53 + i * 0.09), H * (0.6 + i * 0.09)), layer: 7, scale: 0, shadow: 'cut-shadow-sm',
           });
-          tl.fromTo(el, { scale: [0, 1], rot: [i ? 3 : -3, i ? 1 : -1] },
-            { at: at(line) + off, dur: 0.45, ease: 'outBack' });
+          Motion.place(tl, el, { at: at(line) + off });
         });
 
         // vastu-vidya — the word that justifies the whole framing
@@ -58,8 +55,7 @@ export default {
              + text('वास्तुविद्या', { size: pick(52, 62), font: 'var(--font-deva)', fill: MB.cream }),
           x: pick(W * 0.72, CX), y: pick(H * 0.28, H * 0.8), layer: 8, scale: 0, shadow: 'cut-shadow',
         });
-        tl.fromTo(vidya, { scale: [2.4, 1], opacity: [0, 1], rot: [6, -1.5] },
-          { at: at('g6') + 1.6, dur: 0.5, ease: 'outBack' });
+        Motion.place(tl, vidya, { at: at('g6') + 1.6 });
         tl.drive(vidya, (l, g, s) => { s.scale = 1 + Math.sin(g * 2.8) * 0.022; }, { at: at('g6') + 2.2 });
 
         // the verse, built line by line as each room is named
@@ -75,7 +71,8 @@ export default {
           svg: mbVastuGrid(gs, { labels: ['वायव्य','उत्तर','ईशान','पश्चिम','ब्रह्म','पूर्व','नैऋत्य','दक्षिण','आग्नेय'] }),
           x: gx, y: gy, layer: 4, opacity: 0, shadow: 'cut-shadow',
         });
-        tl.fromTo(grid, { opacity: [0, 1], scale: [0.92, 1] }, { at: at('g8') + 0.4, dur: 0.5, ease: 'outBack' });
+        // the plan is the board; it inks itself in before anything is placed on it
+        Motion.drawOn(tl, grid, { at: at('g1') - 0.4, dur: 1.8, fade: 0.45 });
 
         rooms.forEach(([label, cell, colour], i) => {
           const col = cell % 3, row = (cell / 3) | 0;
@@ -87,8 +84,8 @@ export default {
             x: gx + (col - 1) * c, y: gy + (row - 1) * c, layer: 6, scale: 0, shadow: 'cut-shadow-sm',
           });
           const cue = i === 0 ? at('g1') + 0.7 : i === 1 ? at('g2') + 0.2 : i === 2 ? at('g2') + 2.2 : at('g4') + 0.5;
-          tl.fromTo(el, { scale: [1.9, 1], opacity: [0, 1], rot: [i % 2 ? 4 : -4, 0] },
-            { at: cue, dur: 0.4, ease: 'outBack' });
+          // arriving from outside the plan, settling into its cell
+          Motion.place(tl, el, { at: cue, dx: (col - 1) * 90, dy: (row - 1) * 90 - 30, dur: 0.46 });
           if (i === 1) tl.drive(el, (l, g, s) => { s.scale = 1 + Math.sin(g * 3) * 0.035; }, { at: cue + 0.5 });
         });
 
@@ -97,10 +94,14 @@ export default {
           id: 'g-cite',
           svg: mbCard(pick(620, 780), pick(84, 96), MB.cream, { sw: 4.5, seed: 'ct' })
              + text('बृहत् संहिता — अध्याय ५३, श्लोक ११८', { size: pick(32, 38), font: 'var(--font-deva)', fill: MB.ink }),
-          x: CX, y: pick(H * 0.8, H * 0.74), layer: 9, opacity: 0, shadow: 'cut-shadow-sm',
+          // the caption owns the centre column at the bottom; the citation lives
+          // under the author cards instead, where there is real space
+          x: pick(W * 0.25, CX), y: pick(H * 0.72, H * 0.74), layer: 9, opacity: 0, shadow: 'cut-shadow-sm',
         });
-        tl.fromTo(cite, { opacity: [0, 1], y: [pick(H * 0.83, H * 0.77), pick(H * 0.8, H * 0.74)] },
-          { at: at('g6') + 0.3, dur: 0.45, ease: 'outCubic' });
+        // Deriving from the element's authored y. Hardcoding coordinates in
+        // the tween silently overrides wherever the element was placed — which
+        // is how this one kept reappearing inside the caption band.
+        Motion.place(tl, cite, { at: at('g6') + 0.3 });
       },
     });
   },

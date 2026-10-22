@@ -26,7 +26,7 @@ function parseArgs(argv) {
   const a = {
     episode: null, skipVoice: false, skipRender: false, draft: false,
     jobs: 0, music: null, musicGain: null, preset: null, captions: false, crf: 17,
-    short: null, engine: null, voiceName: null, ttsModel: null,
+    short: null, from: null, to: null, engine: null, voiceName: null, ttsModel: null,
   };
   for (let i = 2; i < argv.length; i++) {
     const t = argv[i];
@@ -273,7 +273,19 @@ async function main() {
   // vertically from the same code. That is only possible because the animation
   // is a program, and it is why these read as native verticals.
   if (a.short) {
-    const w = windows[a.short];
+    // A chapter boundary is rarely where a Short should start — several of
+    // ours open mid-list or on "और". --from/--to cut on line ids instead, so
+    // a Short can open on a hook even when that hook lives in the chapter
+    // before the material it introduces.
+    let w = windows[a.short];
+    if (a.from || a.to) {
+      const t0 = timings[a.from]?.start, t1 = timings[a.to]?.end;
+      if ((a.from && t0 === undefined) || (a.to && t1 === undefined)) {
+        console.error(`[build] unknown line id in --from/--to`);
+        process.exit(1);
+      }
+      w = { start: Math.max(0, (t0 ?? w?.start ?? 0) - 0.35), end: (t1 ?? w?.end ?? 0) + 0.45 };
+    }
     if (!w) {
       console.error(`[build] no chapter "${a.short}". available: ${Object.keys(windows).join(', ') || '(none)'}`);
       process.exit(1);

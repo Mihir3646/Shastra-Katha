@@ -25,16 +25,16 @@ export default {
         stage.add({ id: 'sw-border', svg: mbBorder(W, H), x: 0, y: 0, layer: 60, boil: false });
 
         // --- layout ------------------------------------------------------
-        const GS = pick(Math.min(W * 0.34, 440), Math.min(W * 0.62, 600));
+        const GS = pick(Math.min(W * 0.34, 440), Math.min(W * 0.56, 560));
         const C  = GS / 3;
-        const GX = pick(W * 0.66, CX), GY = pick(H * 0.52, H * 0.46);
+        const GX = pick(W * 0.66, CX), GY = pick(H * 0.52, H * 0.50);
         // the south-east cell of the plan — where the answer ends up
         const SEX = GX + C, SEY = GY + C;
         // where the stove starts: out on its own, being cooked on
-        const HX = pick(W * 0.22, CX), HY = pick(H * 0.5, H * 0.2);
+        const HX = pick(W * 0.22, CX), HY = pick(H * 0.5, H * 0.22);
 
         const stove = stage.add({
-          id: 'sw-chulha', svg: chulha(pick(290, 330)),
+          id: 'sw-chulha', svg: chulha(pick(290, 260)),
           x: HX, y: HY, layer: 9, scale: 0, shadow: 'cut-shadow',
         });
         Motion.fly(tl, stove, { at: 0.3, dur: 1.0, dir: 'l', dist: 500, arc: 80, spin: 8 });
@@ -51,7 +51,7 @@ export default {
         const q = stage.add({
           id: 'sw-q',
           svg: text('रसोई किस दिशा में?', { size: pick(60, 80), font: 'var(--font-deva)', fill: MB.ink }),
-          x: pick(W * 0.66, CX), y: pick(H * 0.16, H * 0.1), layer: 8, opacity: 0,
+          x: pick(W * 0.66, CX), y: pick(H * 0.16, H * 0.09), layer: 8, opacity: 0,
         });
         tl.fromTo(q, { opacity: [0, 1], y: [q.y + 24, q.y] }, { at: at('s1') - 0.1, dur: 0.8, ease: 'outCubic' });
 
@@ -91,7 +91,7 @@ export default {
           id: 'sw-tag',
           svg: mbCard(pick(400, 520), pick(92, 110), MB.cream, { sw: 5, seed: 'tag' })
              + text('दक्षिण-पूर्व', { size: pick(42, 52), font: 'var(--font-deva)', fill: MB.deepRed }),
-          x: pick(W * 0.24, CX), y: pick(H * 0.72, H * 0.74), layer: 9, scale: 0, shadow: 'cut-shadow',
+          x: pick(W * 0.24, CX), y: pick(H * 0.72, H * 0.70), layer: 9, scale: 0, shadow: 'cut-shadow',
         });
         Motion.fly(tl, tag, { at: SETTLE + 1.15, dur: 0.8, dir: 'b', dist: 280, arc: 30, spin: 6 });
 

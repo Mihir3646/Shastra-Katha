@@ -82,11 +82,12 @@ export default {
         });
         stage.add({ id: 'q', svg: text(lines.join('\n'), { size: 112, font: 'var(--font-deva)', fill: MB.ink, lineHeight: 1.12, weight: 700 }),
           x: CX, y: H * 0.26, layer: 8 });
-        stage.add({ id: 'cook', svg: mbFigure(1.5, { robe: MB.indigo, robePattern: 'dots' }),
-          x: W * 0.30, y: H * 0.62, layer: 6, shadow: 'cut-shadow' });
-        stage.add({ id: 'chulha', svg: chulha(230), x: W * 0.72, y: H * 0.70, layer: 5, shadow: 'cut-shadow' });
-        stage.add({ id: 'grid', svg: mbVastuGrid(300, { labels: ['','','','','','','','','आग्नेय'], highlight: 8, labelSize: 30 }),
-          x: CX, y: H * 0.88, layer: 7, rot: -4, shadow: 'cut-shadow' });
+        // The stove is the subject of the episode and reads better at grid
+        // size than a figure does. The packaging data wants a face OR high
+        // contrast; the saturated ground supplies the contrast.
+        stage.add({ id: 'chulha', svg: chulha(430), x: CX, y: H * 0.585, layer: 6, shadow: 'cut-shadow' });
+        stage.add({ id: 'grid', svg: mbVastuGrid(430, { labels: ['','','','','','','','','आग्नेय'], highlight: 8, labelSize: 40 }),
+          x: CX, y: H * 0.82, layer: 7, rot: -3, shadow: 'cut-shadow' });
         return;
       }
 
@@ -113,13 +114,9 @@ export default {
       // the cook at her stove — the face is the single biggest packaging gap
       // we had, and pairing her with the chulha makes it one picture instead
       // of two props sharing a frame
-      stage.add({ id: 'cook', svg: mbFigure(1.05, { robe: MB.indigo, robePattern: 'dots' }),
-        x: W * 0.14, y: H * 0.46, layer: 6, shadow: 'cut-shadow' });
-      stage.add({ id: 'chulha', svg: chulha(168), x: W * 0.30, y: H * 0.70, layer: 5, shadow: 'cut-shadow' });
-
-      // the vastu signifier, small and fully inside the frame
-      stage.add({ id: 'grid', svg: mbVastuGrid(188, { labels: ['','','','','','','','','आग्नेय'], highlight: 8, labelSize: 22 }),
-        x: W * 0.87, y: H * 0.79, layer: 7, rot: -5, shadow: 'cut-shadow' });
+      stage.add({ id: 'chulha', svg: chulha(280), x: W * 0.20, y: H * 0.42, layer: 6, shadow: 'cut-shadow' });
+      stage.add({ id: 'grid', svg: mbVastuGrid(190, { labels: ['','','','','','','','','आग्नेय'], highlight: 8, labelSize: 22 }),
+        x: W * 0.20, y: H * 0.78, layer: 7, rot: -4, shadow: 'cut-shadow' });
 
       stage.add({ id: 'q', svg: text('रसोई\nकिस दिशा में?', { size: 124, font: 'var(--font-deva)', fill: MB.ink, lineHeight: 1.08, weight: 700 }),
         x: W * 0.665, y: H * 0.33, layer: 8 });

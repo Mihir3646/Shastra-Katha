@@ -33,7 +33,7 @@
     "width": 2048,
     "height": 1152,
     "fps": 1,
-    "label": "Channel banner \u2014 safe area 1235x338 centred"
+    "label": "Channel banner — safe area 1235x338 centred"
   },
   "thumb": {
     "width": 1280,
@@ -46,5 +46,23 @@
     "height": 1400,
     "fps": 1,
     "label": "Standalone artwork export"
+  },
+  "vthumb1": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 1,
+    "label": "Shorts 1 thumbnail"
+  },
+  "vthumb2": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 1,
+    "label": "Shorts 2 thumbnail"
+  },
+  "vthumb3": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 1,
+    "label": "Shorts 3 thumbnail"
   }
 }

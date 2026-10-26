@@ -61,6 +61,35 @@ export default {
         return;
       }
 
+      if (kind.startsWith('vthumb')) {
+        // Shorts thumbnails are only seen on the channel's Shorts tab and in
+        // search — never in the feed, where the video just plays. So: one
+        // short line, very large, and the figure, which is what reads at
+        // grid size. The preset name carries which of the three — the scene
+        // runs in the browser, so there is no process.env to read here.
+        const n = Number(kind.slice(6)) || 1;
+        const lines = {
+          1: ['रसोई', 'किस दिशा में?'],
+          2: ['सिर्फ़ रसोई', 'नहीं — 4 कमरे'],
+          3: ['रसोई वहाँ', 'नहीं है तो?'],
+        }[n] ?? ['रसोई', 'किस दिशा में?'];
+
+        stage.add({ id: 'bg', svg: `<rect width="${W}" height="${H}" fill="${MB.deepRed}"/>`, x: 0, y: 0, layer: 0, boil: false });
+        stage.add({ id: 'border', svg: mbBorder(W, H, { fill: MB.ochre, inset: 16, band: 30 }), x: 0, y: 0, layer: 50, boil: false });
+        stage.add({
+          id: 'panel', svg: mbCard(W * 0.82, H * 0.30, MB.cream, { sw: 8, seed: 'vt' }),
+          x: CX, y: H * 0.26, layer: 3, shadow: 'cut-shadow',
+        });
+        stage.add({ id: 'q', svg: text(lines.join('\n'), { size: 112, font: 'var(--font-deva)', fill: MB.ink, lineHeight: 1.12, weight: 700 }),
+          x: CX, y: H * 0.26, layer: 8 });
+        stage.add({ id: 'cook', svg: mbFigure(1.5, { robe: MB.indigo, robePattern: 'dots' }),
+          x: W * 0.30, y: H * 0.62, layer: 6, shadow: 'cut-shadow' });
+        stage.add({ id: 'chulha', svg: chulha(230), x: W * 0.72, y: H * 0.70, layer: 5, shadow: 'cut-shadow' });
+        stage.add({ id: 'grid', svg: mbVastuGrid(300, { labels: ['','','','','','','','','आग्नेय'], highlight: 8, labelSize: 30 }),
+          x: CX, y: H * 0.88, layer: 7, rot: -4, shadow: 'cut-shadow' });
+        return;
+      }
+
       // thumbnail template
       //
       // Rebuilt against the packaging data: 89% of breakout thumbnails carry a

@@ -64,5 +64,11 @@
     "height": 1920,
     "fps": 1,
     "label": "Shorts 3 thumbnail"
+  },
+  "thumb2": {
+    "width": 1280,
+    "height": 720,
+    "fps": 1,
+    "label": "Episode 2 thumbnail"
   }
 }

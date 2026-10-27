@@ -58,7 +58,7 @@ export default {
           svg: mbCard(pick(196, 230), pick(60, 68), MB.ochre, { pattern: 'dots', sw: 4, seed: 'ms' + i })
              + text(t, { size: pick(30, 34), font: 'var(--font-deva)', fill: MB.ink }),
           x: pick(W * 0.70 + ((i % 2) - 0.5) * 230, CX + ((i % 2) - 0.5) * 250),
-          y: pick(H * 0.20 + Math.floor(i / 2) * 0.125, H * 0.46 + Math.floor(i / 2) * 0.085) * (pick(1, 1)),
+          y: pick(H * (0.20 + Math.floor(i / 2) * 0.125), H * (0.46 + Math.floor(i / 2) * 0.085)),
           layer: 9, scale: 0, shadow: 'cut-shadow-sm',
         }));
         tl.stagger(cards, { opacity: [0, 1], scale: [1, 1] },

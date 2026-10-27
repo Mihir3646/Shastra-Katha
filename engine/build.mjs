@@ -335,10 +335,40 @@ async function main() {
     return src;
   };
   const anySrc = await readAll();
+  /** [filename, source] for each chapter, for the source-level guards below. */
+  const chapterSources = await (async () => {
+    try {
+      const { readdir } = await import('node:fs/promises');
+      const files = (await readdir(path.join(epDir, 'chapters'))).filter(f => f.endsWith('.js')).sort();
+      return Promise.all(files.map(async f => [f, await readFile(path.join(epDir, 'chapters', f), 'utf8')]));
+    } catch { return []; }
+  })();
   if (!/addDisclaimer/.test(anySrc)) {
     console.warn(`[build] WARNING: ${a.episode} has no on-screen disclaimer.`);
     console.warn(`        import { addDisclaimer } from '../../engine/disclaimer.js'`);
     console.warn(`        and call addDisclaimer(stage, { at: <end of last line> }).`);
+  }
+
+  // `H * 0.5 + i * 0.1` parses as `(H * 0.5) + (i * 0.1)`, so the per-item
+  // offset is a tenth of a PIXEL and every element in the loop lands on the
+  // same spot. It is invisible in review and obvious on screen, and it has
+  // shipped twice. The fix is always `H * (0.5 + i * 0.1)`.
+  {
+    const bad = [];
+    // only flag when the OFFSET is a bare fraction. `W * 0.18 + i * W * 0.155`
+    // is correct — that offset is scaled too.
+    const re = /[HW] \* [0-9.]+ \+ (?:i|j|n|Math\.floor\([^)]*\)) \* (?![HW]\b)[0-9.]+/g;
+    for (const [file, src] of chapterSources) {
+      for (const m of src.matchAll(re)) {
+        bad.push(`${file}:${src.slice(0, m.index).split('\n').length}  ${m[0]}…`);
+      }
+    }
+    if (bad.length) {
+      console.warn(`[build] WARNING: ${bad.length} fraction(s) multiplied before the offset is added —`);
+      console.warn(`        every element in that loop will land on the same spot.`);
+      for (const b of bad) console.warn(`          ${b}`);
+      console.warn(`        write H * (0.5 + i * 0.1), not H * 0.5 + i * 0.1`);
+    }
   }
 
   // A caption that wraps past two lines is tall enough to reach up into the

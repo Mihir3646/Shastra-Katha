@@ -6,7 +6,7 @@
  *   npm run shot -- brand 0 --preset=logo
  *   npm run shot -- brand 0 --preset=banner
  */
-import { MB, mbBorder, sunFace, mbVastuGrid, mbBand, mbCard, mbDisc, mbFigure, fish, mbLotus, ink, chulha } from '../../engine/madhubani.js';
+import { MB, mbBorder, sunFace, mbVastuGrid, mbBand, mbCard, mbDisc, mbFigure, mbTree, fish, mbLotus, ink, chulha } from '../../engine/madhubani.js';
 import { text } from '../../engine/kit.js';
 
 export default {
@@ -88,6 +88,27 @@ export default {
         stage.add({ id: 'chulha', svg: chulha(430), x: CX, y: H * 0.585, layer: 6, shadow: 'cut-shadow' });
         stage.add({ id: 'grid', svg: mbVastuGrid(430, { labels: ['','','','','','','','','आग्नेय'], highlight: 8, labelSize: 40 }),
           x: CX, y: H * 0.82, layer: 7, rot: -3, shadow: 'cut-shadow' });
+        return;
+      }
+
+      if (kind === 'thumb2') {
+        // Episode 2 — the peepal and its direction. Same grammar as episode 1:
+        // saturated ground, a cream panel, the subject at large size.
+        // indigo, not green: a green tree on a green ground disappears, and it
+        // also keeps this distinct from episode 1's red at thumbnail size
+        stage.add({ id: 'bg', svg: `<rect width="${W}" height="${H}" fill="${MB.indigo}"/>`, x: 0, y: 0, layer: 0, boil: false });
+        stage.add({ id: 'border', svg: mbBorder(W, H, { fill: MB.ochre, inset: 14, band: 26 }), x: 0, y: 0, layer: 50, boil: false });
+        stage.add({
+          id: 'panel', svg: mbCard(W * 0.58, H * 0.50, MB.cream, { sw: 7, seed: 't2' }),
+          x: W * 0.665, y: H * 0.40, layer: 3, shadow: 'cut-shadow',
+        });
+        stage.add({ id: 'tree', svg: mbTree(400, { kind: 'peepal' }), x: W * 0.20, y: H * 0.46, layer: 6, shadow: 'cut-shadow' });
+        stage.add({ id: 'q', svg: text('पीपल\nकिस दिशा में?', { size: 118, font: 'var(--font-deva)', fill: MB.ink, lineHeight: 1.08, weight: 700 }),
+          x: W * 0.665, y: H * 0.33, layer: 8 });
+        stage.add({ id: 'sub', svg: mbBand(W * 0.44, { h: 56, fill: MB.ochre, pattern: 'chevron' }),
+          x: W * 0.665, y: H * 0.565, layer: 8 });
+        stage.add({ id: 'subt', svg: text('ग्रंथ 4 पेड़ गिनाता है', { size: 44, font: 'var(--font-deva)', fill: MB.ink, weight: 700 }),
+          x: W * 0.665, y: H * 0.565, layer: 9 });
         return;
       }
 

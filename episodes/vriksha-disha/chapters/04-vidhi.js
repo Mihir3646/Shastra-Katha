@@ -49,7 +49,7 @@ export default {
             id: `v-na${i}`,
             svg: mbCard(pick(330, 380), pick(66, 74), MB.cream, { sw: 4, seed: 'vn' + i })
                + text(t, { size: pick(30, 34), font: 'var(--font-deva)', fill: MB.ink }),
-            x: pick(W * 0.70, CX), y: pick(H * 0.18 + i * 0.105, H * 0.46 + i * 0.075), layer: 9,
+            x: pick(W * 0.70, CX), y: pick(H * (0.18 + i * 0.105), H * (0.46 + i * 0.075)), layer: 9,
             scale: 0, shadow: 'cut-shadow-sm',
           });
           Motion.place(tl, el, { at: at(cue) + 0.1, dur: 0.42 });

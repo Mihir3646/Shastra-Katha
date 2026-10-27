@@ -61,7 +61,9 @@ export default {
             id: `c-l${i}`,
             svg: mbCard(pick(170, 186), pick(56, 62), MB.cream, { sw: 4, seed: 'cl' + i })
                + text(label, { size: pick(30, 34), font: 'var(--font-deva)', fill: MB.ink }),
-            x, y: y + pick(120, 130), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
+            // the label goes on the far side from the house, or the north tree's
+            // label lands on top of it
+            x, y: y + (dy < 0 ? -1 : 1) * pick(120, 130), layer: 8, scale: 0, shadow: 'cut-shadow-sm',
           });
           Motion.place(tl, l, { at: at(cue) + 0.4, dur: 0.4 });
           planted.push(t, l);

@@ -35,7 +35,7 @@ export default {
         const saplings = [];
         CHAAR.forEach((t, i) => {
           const x = pick(W * 0.18 + i * W * 0.155, CX + ((i % 2) - 0.5) * 260);
-          const y = pick(H * 0.34, H * 0.22 + Math.floor(i / 2) * 0.17);
+          const y = pick(H * 0.34, H * (0.22 + Math.floor(i / 2) * 0.17));
           const tr = stage.add({ id: `l-t${i}`, svg: mbTree(pick(150, 160), { kind: 'plain' }),
             x, y, layer: 6, scale: 0, shadow: 'cut-shadow' });
           const lb = stage.add({
@@ -66,7 +66,7 @@ export default {
             id: `l-d${i}`,
             svg: mbCard(pick(400, 470), pick(66, 74), col, { sw: 4.5, seed: 'ld' + i })
                + text(t, { size: pick(30, 34), font: 'var(--font-deva)', fill: col === MB.cream ? MB.ink : MB.cream }),
-            x: pick(W * 0.26, CX), y: pick(H * 0.62 + i * 0.075, H * 0.64 + i * 0.055), layer: 9,
+            x: pick(W * 0.26, CX), y: pick(H * (0.62 + i * 0.075), H * (0.64 + i * 0.055)), layer: 9,
             scale: 0, shadow: 'cut-shadow-sm',
           });
           Motion.place(tl, el, { at: at(cue) + 0.1, dur: 0.4 });

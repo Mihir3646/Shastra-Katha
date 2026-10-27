@@ -426,6 +426,64 @@ export function chulha(w, opts = {}) {
 }
 
 /** Steam / smoke curl — rises off the pot, or incense. */
+/**
+ * A tree, in four shapes.
+ *
+ * 53.85 is about four figs — पाकड़, बरगद, गूलर, पीपल — so they have to be
+ * told apart at a glance without labels doing all the work. The canopy
+ * silhouette carries the difference: peepal gets the heart-shaped leaf tip
+ * it is known by, banyan gets aerial roots, gular a low heavy crown, pakar
+ * a narrow upright one.
+ *
+ * kind: 'peepal' | 'bargad' | 'gular' | 'pakar' | 'plain'
+ */
+export function mbTree(h, opts = {}) {
+  const { kind = 'plain', leaf = MB.green, trunk = MB.brown, pattern = 'leafrow',
+          sw = 4.5 } = opts;
+  const w = h * 0.78;
+  let out = '';
+
+  // trunk first, so the canopy overlaps it
+  out += ink(`M ${f(-w * 0.07)} ${f(h * 0.5)} L ${f(-w * 0.05)} ${f(h * 0.04)}
+              L ${f(w * 0.05)} ${f(h * 0.04)} L ${f(w * 0.07)} ${f(h * 0.5)} Z`,
+    trunk, { pattern: 'stipple', sw: sw * 0.85 });
+
+  if (kind === 'bargad') {
+    // aerial roots — the one thing everyone recognises a banyan by
+    for (const x of [-0.30, -0.13, 0.13, 0.30]) {
+      out += `<path d="M ${f(w * x)} ${f(-h * 0.02)} L ${f(w * x * 0.96)} ${f(h * 0.46)}"
+                fill="none" stroke="${MB.ink}" stroke-width="${f(sw * 0.6)}"
+                stroke-linecap="round" class="mb-draw"/>`;
+    }
+  }
+
+  const canopy = {
+    // wide and low, sitting heavy
+    bargad: `M 0 ${f(-h * 0.52)} Q ${f(w * 0.62)} ${f(-h * 0.44)}, ${f(w * 0.58)} ${f(-h * 0.06)}
+             Q ${f(w * 0.30)} ${f(h * 0.10)}, 0 ${f(h * 0.04)}
+             Q ${f(-w * 0.30)} ${f(h * 0.10)}, ${f(-w * 0.58)} ${f(-h * 0.06)}
+             Q ${f(-w * 0.62)} ${f(-h * 0.44)}, 0 ${f(-h * 0.52)} Z`,
+    // a heart, tipped — the peepal leaf
+    peepal: `M 0 ${f(-h * 0.60)} Q ${f(w * 0.52)} ${f(-h * 0.46)}, ${f(w * 0.40)} ${f(-h * 0.10)}
+             Q ${f(w * 0.24)} ${f(h * 0.10)}, 0 ${f(h * 0.06)}
+             Q ${f(-w * 0.24)} ${f(h * 0.10)}, ${f(-w * 0.40)} ${f(-h * 0.10)}
+             Q ${f(-w * 0.52)} ${f(-h * 0.46)}, 0 ${f(-h * 0.60)} Z`,
+    // low, round, dense
+    gular:  `M 0 ${f(-h * 0.46)} Q ${f(w * 0.50)} ${f(-h * 0.40)}, ${f(w * 0.48)} ${f(-h * 0.08)}
+             Q ${f(w * 0.26)} ${f(h * 0.08)}, 0 ${f(h * 0.04)}
+             Q ${f(-w * 0.26)} ${f(h * 0.08)}, ${f(-w * 0.48)} ${f(-h * 0.08)}
+             Q ${f(-w * 0.50)} ${f(-h * 0.40)}, 0 ${f(-h * 0.46)} Z`,
+    // narrow and upright
+    pakar:  `M 0 ${f(-h * 0.62)} Q ${f(w * 0.36)} ${f(-h * 0.48)}, ${f(w * 0.32)} ${f(-h * 0.12)}
+             Q ${f(w * 0.20)} ${f(h * 0.08)}, 0 ${f(h * 0.04)}
+             Q ${f(-w * 0.20)} ${f(h * 0.08)}, ${f(-w * 0.32)} ${f(-h * 0.12)}
+             Q ${f(-w * 0.36)} ${f(-h * 0.48)}, 0 ${f(-h * 0.62)} Z`,
+  };
+  canopy.plain = canopy.gular;
+  out += ink(canopy[kind] ?? canopy.plain, leaf, { pattern, sw });
+  return out;
+}
+
 export function mbSteam(h, opts = {}) {
   const { stroke = MB.ink, width = 4, waves = 3, opacity = 0.55 } = opts;
   let d = 'M 0 0';

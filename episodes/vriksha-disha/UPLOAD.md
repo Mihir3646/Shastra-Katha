@@ -1,6 +1,6 @@
 # Episode 2 — upload pack
 
-3m38s · 1920x1080 · -14.2 LUFS · 6 chapters
+3m54s · 1920x1080 · -14.1 LUFS · 6 chapters
 
 ---
 
@@ -39,8 +39,10 @@ Alternates:
 
 काटने की विधि भी लिखी है। श्लोक एक सौ बीस और एक सौ इक्कीस।
 
-पिछले वीडियो में हमने कहा था कि जल का स्थान आगे पढ़ेंगे — वह इसी
-वीडियो के अंत में है।
+और लगाने का तरीक़ा भी ग्रंथ बताता है। अध्याय पचपन, श्लोक चार और पाँच
+में दस पेड़ ऐसे हैं जो जड़ या शाखा से लगाए जाते हैं।
+
+जल के स्थान पर जो कहा था — वह अगले वीडियो में, पूरा।
 
 ━━━━━━━━━━━━━━━━━━━━
 
@@ -51,7 +53,7 @@ Alternates:
 0:52 काटिए मत
 1:42 काटना ही पड़े तो
 2:20 कौन से लगाएँ
-2:57 और जल
+2:57 कैसे लगाएँ
 
 ━━━━━━━━━━━━━━━━━━━━
 
@@ -63,7 +65,7 @@ Alternates:
 अध्याय 53 · https://www.wisdomlib.org/hinduism/book/brihat-samhita/d/doc229297.html
 अध्याय 55 · https://www.wisdomlib.org/hinduism/book/brihat-samhita/d/doc229299.html
 
-श्लोक 53.76, 53.85, 53.87, 53.119, 53.120, 53.121, 55.3, 55.12, 55.31
+श्लोक 53.76, 53.85, 53.87, 53.120, 53.121, 55.3, 55.4-5, 55.12, 55.31
 
 ━━━━━━━━━━━━━━━━━━━━
 
@@ -109,7 +111,7 @@ vastu in hindi, shastra katha
 | Made for kids | **No** |
 | Playlist | वास्तु शास्त्र (same as episode 1) |
 | End screen | **Now worth adding** — link episode 1. There are two videos. |
-| Cards | link episode 1 around 2:57, where this one mentions the water verse |
+| Cards | link episode 1 around 0:50, where this one picks up from it |
 
 ---
 
@@ -117,7 +119,7 @@ vastu in hindi, shastra katha
 
 ```
 इस वीडियो के सब श्लोक बृहत् संहिता के अध्याय 53 और 55 से हैं —
-53.85, 53.87, 53.120, 53.121, 55.3, 55.12। अनुवाद निःशुल्क है,
+53.85, 53.87, 53.120, 53.121, 55.3, 55.4, 55.12। अनुवाद निःशुल्क है,
 लिंक विवरण में है।
 
 कहीं चूक लगे तो संदर्भ के साथ बताइए।
@@ -127,6 +129,8 @@ vastu in hindi, shastra katha
 
 ## What this episode does not say
 
-53.86 and 53.119 both list harms. Neither is read aloud — the text is
-reported as advising against, and nothing more. No Hindi common name is given
+53.86 lists harms and they are not read aloud — the text is reported as
+advising against, and nothing more. The water verse (53.119) is not in this
+episode at all; it is the whole subject of the next one, which is what
+episode 1 promised. No Hindi common name is given
 for Ariṣṭa or Punnāga, because Iyer's glosses disagree with usual usage.

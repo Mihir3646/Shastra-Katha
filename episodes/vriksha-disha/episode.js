@@ -15,7 +15,7 @@ import chaar from './chapters/02-chaar-ped.js';
 import mat from './chapters/03-kaatiye-mat.js';
 import vidhi from './chapters/04-vidhi.js';
 import lagayen from './chapters/05-kaun-lagayen.js';
-import jal from './chapters/06-jal.js';
+import kaise from './chapters/06-kaise-lagayen.js';
 
 export default {
   meta: {
@@ -32,5 +32,5 @@ export default {
   captions: { enabled: true, style: 'outline', position: 0.87, size: 46, wrapAt: 40 },
   music: { file: 'assets/music/bed.mp3', gain: 0.13 },
 
-  chapters: [peepal, chaar, mat, vidhi, lagayen, jal],
+  chapters: [peepal, chaar, mat, vidhi, lagayen, kaise],
 };
